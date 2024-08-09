@@ -156,11 +156,15 @@
     <ClInclude Include="core\variables.h" />
     <ClInclude Include="features.h" />
     <ClInclude Include="features\CRC.h" />
+    <ClInclude Include="features\legitbot\aim.h" />
+    <ClInclude Include="features\legitbot\legitbot.h" />
     <ClInclude Include="features\misc.h" />
     <ClInclude Include="features\misc\movement.h" />
     <ClInclude Include="features\visuals.h" />
     <ClInclude Include="features\visuals\chams.h" />
     <ClInclude Include="features\visuals\overlay.h" />
+    <ClInclude Include="sdk\interfaces\cgametracemanager.h" />
+    <ClInclude Include="sdk\interfaces\ipvs.h" />
     <ClInclude Include="sdk\const.h" />
     <ClInclude Include="sdk\datatypes\color.h" />
     <ClInclude Include="sdk\datatypes\keyvalue3.h" />
@@ -225,6 +229,9 @@
     <ClCompile Include="..\dependencies\minhook\hde\hde64.c" />
     <ClCompile Include="..\dependencies\minhook\hook.c" />
     <ClCompile Include="..\dependencies\minhook\trampoline.c" />
+    <ClCompile Include="features\legitbot.cpp" />
+    <ClCompile Include="features\legitbot\aim.cpp" />
+    <ClCompile Include="sdk\interfaces\cgametracemanager.cpp" />
     <ClCompile Include="core.cpp" />
     <ClCompile Include="core\config.cpp" />
     <ClCompile Include="core\convars.cpp" />
