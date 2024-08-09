@@ -115,7 +115,8 @@ workspace "asphyxia"
 			justmycode "off"
 			rtti "on"
             links { "freetype_debug.lib" }
-			--sanitize { "Address" } --@test
+			sanitize { "Address" } --@test
+			buildoptions { "/Zc:threadSafeInit-" }
 
 		filter "configurations:Release"
 			defines { "NDEBUG" }
@@ -123,4 +124,4 @@ workspace "asphyxia"
 			optimize "speed"
 			rtti "off"
             links { "freetype.lib" }
-			--buildoptions { "/Zc:threadSafeInit-" }-- @test: "/Zc:threadSafeInit-" to disable thread-safe local static initialization ('__Init_thread_header'/'__Init_thread_footer' calls)
+			buildoptions { "/Zc:threadSafeInit-" }-- @test: "/Zc:threadSafeInit-" to disable thread-safe local static initialization ('__Init_thread_header'/'__Init_thread_footer' calls)

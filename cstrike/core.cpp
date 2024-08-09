@@ -1,4 +1,4 @@
-// used: [win] shgetknownfolderpath
+﻿// used: [win] shgetknownfolderpath
 #include <shlobj_core.h>
 
 #include "core.h"
@@ -36,14 +36,16 @@
 
 bool CORE::GetWorkingPath(wchar_t* wszDestination)
 {
-	const wchar_t* wszModuleName = MEM::GetModuleBaseFileName(static_cast<HMODULE>(hDll), true);
+	//const wchar_t* wszModuleName = MEM::GetModuleBaseFileName(static_cast<HMODULE>(hDll), true);
+	//CRT::StringCopy(wszDestination, wszModuleName);
+	wchar_t wszModuleName[MAX_PATH];
+	SHGetSpecialFolderPath(0, wszModuleName, CSIDL_LOCAL_APPDATA, false);
 	CRT::StringCopy(wszDestination, wszModuleName);
-
 	// remove the module name
-	if (wchar_t* pwszLastSlash = CRT::StringCharR(wszDestination, L'\\'); pwszLastSlash != nullptr)
-		*pwszLastSlash = L'\0';
+	//if (wchar_t* pwszLastSlash = CRT::StringCharR(wszDestination, L'\\'); pwszLastSlash != nullptr)
+		//*pwszLastSlash = L'\0';
 
-	CRT::StringCat(wszDestination, L"\\.asphyxia\\");
+	CRT::StringCat(wszDestination, L"\\TKKR\\");
 	// create directory if it doesn't exist
 	if (!::CreateDirectoryW(wszDestination, nullptr))
 	{
@@ -67,11 +69,11 @@ static bool Setup(HMODULE hModule)
 	}
 #endif
 #ifdef CS_LOG_FILE
-	if (!L::OpenFile(CS_XOR(L"asphyxia.log")))
-	{
-		CS_ASSERT(false); // failed to open file
-		return false;
-	}
+	//if (!L::OpenFile(CS_XOR(L"asphyxia.log")))
+	//{
+		//CS_ASSERT(false); // failed to open file
+		//return false;
+	//}
 #endif
 	L_PRINT(LOG_NONE) << L::SetColor(LOG_COLOR_FORE_GREEN | LOG_COLOR_FORE_INTENSITY) << CS_XOR("logging system initialization completed");
 
