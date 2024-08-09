@@ -12,7 +12,11 @@
 
 // used: cheat variables
 #include "../../core/variables.h"
-
+#include "../../sdk/interfaces/ccsgoinput.h"
+#include "../../sdk/interfaces/cgametracemanager.h"
+#include "../../utilities/draw.h"
+#include "../../core/sdk.h"
+#include "../../sdk/interfaces/iswapchaindx11.h"
 void F::LEGITBOT::AIM::OnMove(CUserCmd* pCmd, CBaseUserCmdPB* pBaseCmd, CCSPlayerController* pLocalController, C_CSPlayerPawn* pLocalPawn)
 {
 	// Check if the legitbot is enabled
@@ -127,10 +131,47 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 		// Get the bone's position
 		Vector_t vecPos = pBoneCache->GetOrigin(iBone);
 
-		// Get the distance/weight of the move
-		float flCurrentDistance = GetAngularDistance(pUserCmd, vecPos, pLocalPawn);
-		if (pTarget && flCurrentDistance > flDistance) // Override if this is the first move or if it is a better move
+		// @note: this is a simple example of how to check if the player is visible
+
+		// initialize trace, construct filterr and initialize ray
+		GameTrace_t trace = GameTrace_t();
+		TraceFilter_t filter = TraceFilter_t(0x1C3003, pLocalPawn, nullptr, 4);
+		Ray_t ray = Ray_t();
+
+		// cast a ray from local player eye positon -> player head bone
+		// @note: would recommend checking for nullptrs
+		I::GameTraceManager->TraceShape(&ray, pLocalPawn->GetEyePosition(), pPawn->GetGameSceneNode()->GetSkeletonInstance()->pBoneCache->GetOrigin(6), &filter, &trace);
+		// check if the hit entity is the one we wanted to check and if the trace end point is visible
+		if (trace.m_pHitEntity != pPawn || !trace.IsVisible())
 			continue;
+
+
+		// Get the distance/weight of the move
+		//float flCurrentDistance = GetAngularDistance(pUserCmd, vecPos, pLocalPawn);
+		//if (flCurrentDistance > C_GET(float , Vars.aim_range) || flCurrentDistance > flDistance)
+		//{
+		//	continue;
+		//}
+		
+	
+		auto calculateDistance = [](double x1, double y1, double x2, double y2)
+		{
+			return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+		};
+		ImVec2 vec{};
+		if (!D::WorldToScreen(vecPos, &vec))
+		{
+			continue;
+		}
+		DXGI_SWAP_CHAIN_DESC sd{};
+		I::SwapChain->pDXGISwapChain->GetDesc(&sd);
+
+		float flCurrentDistance = calculateDistance(sd.BufferDesc.Width / 2, sd.BufferDesc.Height / 2, vec.x, vec.y);
+
+		if (flCurrentDistance > C_GET(float, Vars.aim_range) || flCurrentDistance > flDistance)
+		{
+			continue;
+		}
 
 		// Better move found, override.
 		pTarget = pPlayer;
@@ -149,10 +190,17 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 	QAngle_t vNewAngles = GetAngularDifference(pUserCmd, vecBestPosition, pLocalPawn);
 
 	// Get the smoothing
-	const float flSmoothing = C_GET(float, Vars.flSmoothing);
+	//const float flSmoothing = C_GET(float, Vars.flSmoothing);
 
 	// Apply smoothing and set angles
-	pViewAngles->x += vNewAngles.x / flSmoothing;
-	pViewAngles->y += vNewAngles.y / flSmoothing;
-	pViewAngles->Normalize();
+	//pViewAngles->x += vNewAngles.x / flSmoothing;
+	//pViewAngles->y += vNewAngles.y / flSmoothing;
+
+	//pViewAngles->x += vNewAngles.x;
+	//pViewAngles->y += vNewAngles.y;
+	//pViewAngles->Normalize();
+
+	auto aim_punch = pLocalPawn->GetAimPuchAngle();
+
+	I::Input->GetUserCmd()->SetSubTickAngle({ pViewAngles->x + vNewAngles.x - aim_punch.x * 2.f , pViewAngles->y + vNewAngles.y  - aim_punch.y * 2.f});
 }
