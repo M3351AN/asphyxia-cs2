@@ -31,6 +31,22 @@ void F::LEGITBOT::AIM::OnMove(CUserCmd* pCmd, CBaseUserCmdPB* pBaseCmd, CCSPlaye
 	SilentAim(pBaseCmd, pLocalPawn, pLocalController);
 }
 
+QAngle_t GetRecoil(CBaseUserCmdPB* pCmd,C_CSPlayerPawn* pLocal)
+{
+	static QAngle_t OldPunch;
+	if (pLocal->GetShotsFired() >= 1)
+	{
+		QAngle_t viewAngles = pCmd->pViewAngles->angValue;
+		QAngle_t delta = viewAngles - (viewAngles + (OldPunch - (pLocal->GetAimPuchAngle() * 2.f)));
+
+		return pLocal->GetAimPuchAngle() * 2.0f;
+	}
+	else
+	{
+		return QAngle_t{ 0, 0 ,0};
+	}
+}
+
 QAngle_t GetAngularDifference(CBaseUserCmdPB* pCmd, Vector_t vecTarget, C_CSPlayerPawn* pLocal)
 {
 	// The current position
@@ -56,6 +72,7 @@ float GetAngularDistance(CBaseUserCmdPB* pCmd, Vector_t vecTarget, C_CSPlayerPaw
 
 void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLocalPawn, CCSPlayerController* pLocalController)
 {
+
 	// Check if the activation key is down
 	if (!IPT::IsKeyDown(C_GET(unsigned int, Vars.nLegitbotActivationKey)) && !C_GET(bool, Vars.bLegitbotAlwaysOn))
 		return;
@@ -70,7 +87,7 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 	// Entity loop
 	const int iHighestIndex = I::GameResourceService->pGameEntitySystem->GetHighestEntityIndex();
 
-	auto aimPunch = pLocalPawn->GetAimPuchAngle(); //get AimPunch angles
+	auto aimPunch = GetRecoil(pUserCmd, pLocalPawn); //get AimPunch angles
 
 	for (int nIndex = 1; nIndex <= iHighestIndex; nIndex++)
 	{
@@ -149,9 +166,8 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 		if (trace.m_pHitEntity != pPawn || !trace.IsVisible())// if invisible, skip this entity
 			continue;
 
-		Vector_t aimPos = { vecPos.x + aimPunch.x, vecPos.x + aimPunch.x, 0 };
 		// Get the distance/weight of the move
-		float flCurrentDistance = GetAngularDistance(pUserCmd, aimPos, pLocalPawn);
+		float flCurrentDistance = GetAngularDistance(pUserCmd, vecPos, pLocalPawn);
 		if (flCurrentDistance > C_GET(float, Vars.flAimRange))// Skip if this move out of aim range
 			continue;
 		if (pTarget && flCurrentDistance > flDistance) // Override if this is the first move or if it is a better move
@@ -176,8 +192,8 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 	// Get the smoothing
 	const float flSmoothing = C_GET(float, Vars.flSmoothing);
 	// Apply smoothing and set angles
-	pViewAngles->x += vNewAngles.x / flSmoothing - aimPunch.x;// minus AimPunch angle to counteract recoil
-	pViewAngles->y += vNewAngles.y / flSmoothing - aimPunch.y;
+	pViewAngles->x += (vNewAngles.x - aimPunch.x ) / flSmoothing; // minus AimPunch angle to counteract recoil
+	pViewAngles->y += (vNewAngles.y - aimPunch.y ) / flSmoothing;
 	pViewAngles->Normalize();
 }
 
@@ -197,7 +213,7 @@ void F::LEGITBOT::AIM::SilentAim(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 	// Entity loop
 	const int iHighestIndex = I::GameResourceService->pGameEntitySystem->GetHighestEntityIndex();
 
-	auto aimPunch = pLocalPawn->GetAimPuchAngle(); //get AimPunch angles
+	auto aimPunch = GetRecoil(pUserCmd, pLocalPawn); //get AimPunch angles
 
 	for (int nIndex = 1; nIndex <= iHighestIndex; nIndex++)
 	{
@@ -276,9 +292,8 @@ void F::LEGITBOT::AIM::SilentAim(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 		if (trace.m_pHitEntity != pPawn || !trace.IsVisible()) // if invisible, skip this entity
 			continue;
 
-		Vector_t aimPos = { vecPos.x + aimPunch.x, vecPos.x + aimPunch.x, 0 };
 		// Get the distance/weight of the move
-		float flCurrentDistance = GetAngularDistance(pUserCmd, aimPos, pLocalPawn);
+		float flCurrentDistance = GetAngularDistance(pUserCmd, vecPos, pLocalPawn);
 		if (flCurrentDistance > C_GET(float, Vars.flSilentRange)) // Skip if this move out of aim range
 			continue;
 		if (pTarget && flCurrentDistance > flDistance) // Override if this is the first move or if it is a better move
@@ -287,7 +302,7 @@ void F::LEGITBOT::AIM::SilentAim(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 		// Better move found, override.
 		pTarget = pPlayer;
 		flDistance = flCurrentDistance;
-		vecBestPosition = aimPos;
+		vecBestPosition = vecPos;
 	}
 
 	// Check if a target was found
