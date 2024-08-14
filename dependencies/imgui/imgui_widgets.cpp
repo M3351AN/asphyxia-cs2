@@ -3020,7 +3020,7 @@ bool ImGui::SliderScalar(const char* label, ImGuiDataType data_type, void* p_dat
 	const ImRect frame_bb(window->DC.CursorPos + ImVec2(label_size.x > 0.0f ? style.ItemInnerSpacing.x + h : 0.0f, label_size.x > 0.0f ? label_size.y : 0.0f), window->DC.CursorPos + ImVec2(w, (label_size.x > 0.0f ? label_size.y : 0.0f) + h));
 	const ImRect total_bb(window->DC.CursorPos, frame_bb.Max - ImVec2((label_size.x > 0.0f ? style.ItemInnerSpacing.x + h : 0.0f), 0.0f));
 
-    const bool temp_input_allowed = (flags & ImGuiSliderFlags_NoInput) == 0;
+    const bool temp_input_allowed = (flags & ImGuiSliderFlags_NoInput) == 1;
     ItemSize(total_bb, style.FramePadding.y);
     if (!ItemAdd(total_bb, id, &frame_bb, temp_input_allowed ? ImGuiItemFlags_Inputable : 0))
         return false;

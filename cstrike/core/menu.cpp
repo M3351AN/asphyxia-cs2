@@ -368,6 +368,11 @@ void T::LegitBot()
 		ImGui::SliderFloat(CS_XOR("smoothing"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
 
 		ImGui::NewLine();
+		ImGui::Checkbox(CS_XOR("silent"), &C_GET(bool, Vars.bSilentbot));
+		if (C_GET(bool, Vars.bSilentbot))
+			ImGui::SliderFloat(CS_XOR("silent range"), &C_GET(float, Vars.flSilentRange), 0.f, 5.f);
+
+		ImGui::NewLine();
 		// Key
 		ImGui::Checkbox(CS_XOR("always on##aimbot"), &C_GET(bool, Vars.bLegitbotAlwaysOn));
 		ImGui::BeginDisabled(C_GET(bool, Vars.bLegitbotAlwaysOn));
