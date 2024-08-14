@@ -310,12 +310,10 @@ void F::LEGITBOT::AIM::SilentAim(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 		return;
 
 	// Point at them
-	QAngle_t* pViewAngles = &(pUserCmd->pViewAngles->angValue); // Just for readability sake!
+	QAngle_t pViewAngles = pUserCmd->pViewAngles->angValue; 
 
 	// Find the change in angles
 	QAngle_t vNewAngles = GetAngularDifference(pUserCmd, vecBestPosition, pLocalPawn);
 
-	
-
-	I::Input->GetUserCmd()->SetSubTickAngle({ pViewAngles->x + vNewAngles.x - aimPunch.x * 2.f, pViewAngles->y + vNewAngles.y - aimPunch.y * 2.f });
+	I::Input->GetUserCmd()->SetSubTickAngle({ pViewAngles.x + vNewAngles.x - aimPunch.x * 2.f, pViewAngles.y + vNewAngles.y - aimPunch.y * 2.f });
 }
