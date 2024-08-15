@@ -871,12 +871,11 @@ void menu::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
 			ImGui::Checkbox(CS_XOR("enable##chams"), &C_GET(bool, Vars.bVisualChams));
-			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("white\0illuminate\0"));
+			ImGui::ColorEdit4(CS_XOR("##visiblecolor"), &C_GET(Color_t, Vars.colVisualChams));
 			ImGui::Checkbox(CS_XOR("enable invisible chams##chams"), &C_GET(bool, Vars.bVisualChamsIgnoreZ));
-
-			ImGui::ColorEdit4(CS_XOR("visible color"), &C_GET(Color_t, Vars.colVisualChams));
 			if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
-				ImGui::ColorEdit4(CS_XOR("invisible color"), &C_GET(Color_t, Vars.colVisualChamsIgnoreZ));
+				ImGui::ColorEdit4(CS_XOR("##invisiblecolor"), &C_GET(Color_t, Vars.colVisualChamsIgnoreZ));
+			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("white\0illuminate\0"));
 
 			ImGui::PopStyleVar();
 		}
@@ -1044,8 +1043,8 @@ void menu::render()
 
 				ImGui::EndListBox();
 			}
-
 			ImGui::ColorEdit4(CS_XOR("##themes.picker"), &C_GET(ColorPickerVar_t, arrColors[nSelectedColor].second), ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_DisplayRGB);
+			ImGui::NewLine();
 			ImGui::PopItemWidth();
 			ImGui::PopStyleVar();
 		}

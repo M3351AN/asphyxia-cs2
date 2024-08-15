@@ -97,7 +97,7 @@ bool ImGui::HotKey(const char* szLabel, unsigned int* pValue)
 	if (!ItemAdd(rectTotal, nIndex, &rectFrame))
 		return false;
 
-	const bool bHovered = ItemHoverable(rectFrame, nIndex, ImGuiItemFlags_None);
+	const bool bHovered = ItemHoverable(rectFrame, nIndex);
 	if (bHovered)
 	{
 		SetHoveredID(nIndex);
@@ -474,7 +474,7 @@ bool D::Setup(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 	ImFontConfig imTahomaConfig;
 	imTahomaConfig.FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
-	FONT::pVisual = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesCJKRATV());
+	FONT::pVisual = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesChineseFull());
 
 	io.Fonts->FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
 	bInitialized = io.Fonts->Build();
