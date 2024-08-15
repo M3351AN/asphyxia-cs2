@@ -70,8 +70,8 @@ void F::OnCreateMove(CUserCmd* pCmd, CBaseUserCmdPB* pBaseCmd, CCSPlayerControll
 	if (pLocalPawn == nullptr)
 		return;
 
-	F::MISC::OnMove(pCmd, pBaseCmd, pLocalController, pLocalPawn);
 	F::LEGITBOT::OnMove(pCmd, pBaseCmd, pLocalController, pLocalPawn);
+	F::MISC::OnMove(pCmd, pBaseCmd, pLocalController, pLocalPawn);
 }
 
 bool F::OnDrawObject(void* pAnimatableSceneObjectDesc, void* pDx11, CMeshData* arrMeshDraw, int nDataCount, void* pSceneView, void* pSceneLayer, void* pUnk, void* pUnk2)

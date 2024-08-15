@@ -28,6 +28,36 @@
 using GameTime_t = std::float_t;
 using GameTick_t = std::int32_t;
 
+template <typename T>
+class CUtlVectorCS2
+{
+public:
+	auto Begin() const
+	{
+		return m_Data;
+	}
+
+	auto End() const
+	{
+		return m_Data + m_Size;
+	}
+
+	auto At(int i) const
+	{
+		return m_Data[i];
+	}
+
+	auto AtPtr(int i) const
+	{
+		return m_Data + i;
+	}
+
+	int m_Size;
+	MEM_PAD(0x4);
+	T* m_Data;
+	MEM_PAD(0x8);
+};
+
 class CEntityInstance;
 
 class CEntityIdentity
@@ -257,7 +287,8 @@ public:
 	SCHEMA_ADD_FIELD(bool, IsWaitForNoAttack, "C_CSPlayerPawn->m_bWaitForNoAttack");
 	SCHEMA_ADD_FIELD(int, GetShotsFired, "C_CSPlayerPawn->m_iShotsFired");
 	SCHEMA_ADD_FIELD(std::int32_t, GetArmorValue, "C_CSPlayerPawn->m_ArmorValue");
-	SCHEMA_ADD_FIELD(QAngle_t, GetAimPuchAngle, "C_CSPlayerPawn->m_aimPunchAngle");
+	SCHEMA_ADD_FIELD(QAngle_t, GetAimPunchAngle, "C_CSPlayerPawn->m_aimPunchAngle");
+	SCHEMA_ADD_FIELD(CUtlVectorCS2<QAngle_t>, GetAimPunchCache, "C_CSPlayerPawn->m_aimPunchCache");
 };
 
 class CBasePlayerController : public C_BaseModelEntity

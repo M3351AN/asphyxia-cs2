@@ -355,33 +355,60 @@ void T::RageBot()
 
 void T::LegitBot()
 {
-	ImGui::BeginChild(CS_XOR("legitbot.aimbot"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImGui::Columns(2, CS_XOR("##legit_collumns"), false);
 	{
-		if (ImGui::BeginMenuBar())
+		ImGui::BeginChild(CS_XOR("legitbot.aimbot"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
 		{
-			ImGui::TextUnformatted(CS_XOR("aimbot"));
-			ImGui::EndMenuBar();
+			if (ImGui::BeginMenuBar())
+			{
+				ImGui::TextUnformatted(CS_XOR("aimbot"));
+				ImGui::EndMenuBar();
+			}
+
+			ImGui::Checkbox(CS_XOR("enable##aimbot"), &C_GET(bool, Vars.bLegitbot));
+			ImGui::SliderFloat(CS_XOR("aim range"), &C_GET(float, Vars.flAimRange), 0.f, 135.f);
+			ImGui::SliderFloat(CS_XOR("smooth"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
+
+			ImGui::NewLine();
+			ImGui::Checkbox(CS_XOR("silent"), &C_GET(bool, Vars.bSilentbot));
+			if (C_GET(bool, Vars.bSilentbot))
+				ImGui::SliderFloat(CS_XOR("silent range"), &C_GET(float, Vars.flSilentRange), 0.f, 5.f);
+
+			ImGui::NewLine();
+			// Key
+			ImGui::Checkbox(CS_XOR("always on##aimbot"), &C_GET(bool, Vars.bLegitbotAlwaysOn));
+			ImGui::BeginDisabled(C_GET(bool, Vars.bLegitbotAlwaysOn));
+			{
+				ImGui::HotKey(CS_XOR("toggle key"), &C_GET(unsigned int, Vars.nLegitbotActivationKey));
+			}
+			ImGui::EndDisabled();
 		}
+		ImGui::EndChild();
 
-		ImGui::Checkbox(CS_XOR("enable##aimbot"), &C_GET(bool, Vars.bLegitbot));
-		ImGui::SliderFloat(CS_XOR("aim range"), &C_GET(float, Vars.flAimRange), 1.f, 135.f);
-		ImGui::SliderFloat(CS_XOR("smoothing"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
-
-		ImGui::NewLine();
-		ImGui::Checkbox(CS_XOR("silent"), &C_GET(bool, Vars.bSilentbot));
-		if (C_GET(bool, Vars.bSilentbot))
-			ImGui::SliderFloat(CS_XOR("silent range"), &C_GET(float, Vars.flSilentRange), 0.f, 5.f);
-
-		ImGui::NewLine();
-		// Key
-		ImGui::Checkbox(CS_XOR("always on##aimbot"), &C_GET(bool, Vars.bLegitbotAlwaysOn));
-		ImGui::BeginDisabled(C_GET(bool, Vars.bLegitbotAlwaysOn));
-		{
-			ImGui::HotKey(CS_XOR("toggle key"), &C_GET(unsigned int, Vars.nLegitbotActivationKey));
-		}
-		ImGui::EndDisabled();
 	}
-	ImGui::EndChild();
+	ImGui::NextColumn();
+	{ /*
+		ImGui::BeginChild(CS_XOR("legitbot.RCS"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
+		{
+			if (ImGui::BeginMenuBar())
+			{
+				ImGui::TextUnformatted(CS_XOR("RCS"));
+				ImGui::EndMenuBar();
+			}
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("standalone RCS"), &C_GET(bool, Vars.bRCS));
+			ImGui::SliderFloat(CS_XOR("pitch scale"), &C_GET(float, Vars.flRCSPitch), 0.f, 2.f);
+			ImGui::SliderFloat(CS_XOR("yaw scale"), &C_GET(float, Vars.flRCSYaw), 0.f, 2.f);
+			ImGui::SliderFloat(CS_XOR("smooth"), &C_GET(float, Vars.flRCSSmooth), 1.f, 100.f);
+
+			ImGui::PopStyleVar();
+		}
+		ImGui::EndChild();*/
+	}
+	ImGui::Columns(1);
 }
 
 void T::Visuals()

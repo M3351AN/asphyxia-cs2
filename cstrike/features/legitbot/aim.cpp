@@ -37,12 +37,14 @@ QAngle_t GetRecoil(CBaseUserCmdPB* pCmd,C_CSPlayerPawn* pLocal)
 	if (pLocal->GetShotsFired() >= 1)
 	{
 		QAngle_t viewAngles = pCmd->pViewAngles->angValue;
-		QAngle_t delta = viewAngles - (viewAngles + (OldPunch - (pLocal->GetAimPuchAngle() * 2.f)));
-
-		return pLocal->GetAimPuchAngle() * 2.0f;
+		QAngle_t delta = viewAngles - (viewAngles + (OldPunch - (pLocal->GetAimPunchAngle() * 2.f)));
+		OldPunch = pLocal->GetAimPunchAngle() * 2.f;
+		//return delta * 2.f;
+		return pLocal->GetAimPunchAngle() * 2.f + delta * 0.5f;//???
 	}
 	else
 	{
+		OldPunch = QAngle_t{0, 0, 0};
 		return QAngle_t{ 0, 0 ,0};
 	}
 }
@@ -315,5 +317,5 @@ void F::LEGITBOT::AIM::SilentAim(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 	// Find the change in angles
 	QAngle_t vNewAngles = GetAngularDifference(pUserCmd, vecBestPosition, pLocalPawn);
 
-	I::Input->GetUserCmd()->SetSubTickAngle({ pViewAngles.x + vNewAngles.x - aimPunch.x * 2.f, pViewAngles.y + vNewAngles.y - aimPunch.y * 2.f });
+	I::Input->GetUserCmd()->SetSubTickAngle({ pViewAngles.x + vNewAngles.x - aimPunch.x, pViewAngles.y + vNewAngles.y - aimPunch.y });
 }

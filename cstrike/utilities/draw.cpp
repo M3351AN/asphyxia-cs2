@@ -472,7 +472,7 @@ bool D::Setup(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 	ImFontConfig imTahomaConfig;
 	imTahomaConfig.FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
-	FONT::pVisual = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\Tahoma.ttf"), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesCyrillic());
+	FONT::pVisual = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\simsun.ttf"), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesCJKRATV());
 
 	io.Fonts->FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
 	bInitialized = io.Fonts->Build();

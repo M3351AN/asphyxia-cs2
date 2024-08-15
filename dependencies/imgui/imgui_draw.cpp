@@ -3937,6 +3937,52 @@ const ImWchar*   ImFontAtlas::GetGlyphRangesDefault()
     return &ranges[0];
 }
 
+const ImWchar* ImFontAtlas::GetGlyphRangesCJKRATV()
+{
+	static const ImWchar ranges[] = {
+		0x0020,
+		0x00FF, // Basic Latin + Latin Supplement
+		0x2000,
+		0x206F, // General Punctuation
+		0x3000,
+		0x30FF, // CJK Symbols and Punctuations, Hiragana, Katakana
+		0x31F0,
+		0x31FF, // Katakana Phonetic Extensions
+		0xFF00,
+		0xFFEF, // Half-width characters
+		0xFFFD,
+		0xFFFD, // Invalid
+		0x4e00,
+		0x9FAF, // CJK Ideograms
+		0x0400,
+		0x052F, // Cyrillic + Cyrillic Supplement
+		0x2DE0,
+		0x2DFF, // Cyrillic Extended-A
+		0xA640,
+		0xA69F, // Cyrillic Extended-B
+		0x2010,
+		0x205E, // Punctuations
+		0x0E00,
+		0x0E7F, // Thai
+		0x0102,
+		0x0103,
+		0x0110,
+		0x0111,
+		0x0128,
+		0x0129,
+		0x0168,
+		0x0169,
+		0x01A0,
+		0x01A1,
+		0x01AF,
+		0x01B0,
+		0x1EA0,
+		0x1EF9,
+		0,
+	};
+	return &ranges[0];
+}
+
 const ImWchar*   ImFontAtlas::GetGlyphRangesGreek()
 {
     static const ImWchar ranges[] =
