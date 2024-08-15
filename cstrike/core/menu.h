@@ -103,3 +103,13 @@ namespace T
 	// current sub tab overlay in visuals tab
 	inline int nCurrentOverlaySubtab = 0;
 }
+
+namespace menu
+{
+	using namespace ImGui;
+
+	const ImGuiColorEditFlags color_edit4_flags = ImGuiColorEditFlags_NoBorder | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel | ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_AlphaPreview;
+
+	void render();
+
+}

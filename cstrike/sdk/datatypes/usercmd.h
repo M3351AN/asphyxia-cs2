@@ -269,8 +269,7 @@ class CUserCmd
 {
 public:
 	MEM_PAD(0x8); // 0x0 VTABLE
-	MEM_PAD(0x8); // TODO: find out what this is, added 14.08.2024
-	MEM_PAD(0x8);
+	MEM_PAD(0x10); // TODO: find out what this is, added 14.08.2024
 	CCSGOUserCmdPB csgoUserCmd; // 0x18
 	CInButtonState nButtons; // 0x58
 	MEM_PAD(0x20); // 0x78

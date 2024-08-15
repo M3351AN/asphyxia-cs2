@@ -51,7 +51,8 @@ void F::OnPresent()
 		// main window
 		ImGui::PushFont(FONT::pMenu[C_GET(int, Vars.nDpiScale)]);
 		// @note: here you can draw your stuff
-		MENU::RenderMainWindow();
+		//MENU::RenderMainWindow();
+		menu::render();
 		// render notifications
 		NOTIFY::Render();
 		ImGui::PopFont();
