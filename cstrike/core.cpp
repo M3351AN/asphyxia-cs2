@@ -223,6 +223,8 @@ BOOL APIENTRY CoreEntryPoint(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
+		DisableThreadLibraryCalls(hModule);
+
 		CORE::hProcess = MEM::GetModuleBaseHandle(nullptr);
 
 		// basic process check

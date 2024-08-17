@@ -78,6 +78,23 @@ namespace MATH
 																 value;
 	}
 
+	[[nodiscard]] CS_INLINE float normalize_yaw(float yaw) noexcept
+	{
+		while (yaw > 180.0f)
+			yaw -= 360.0f;
+
+		while (yaw < -180.0f)
+			yaw += 360.0f;
+
+		return yaw;
+	}
+
+	template <typename T>
+	CS_INLINE T clamp(const T& n, const T& lower, const T& upper)
+	{
+		return Max(lower, Min(n, upper));
+	}
+
 	/* @section: exponential */
 	/// @returns: true if given number is power of two, false otherwise
 	template <typename T> requires (std::is_integral_v<T>)

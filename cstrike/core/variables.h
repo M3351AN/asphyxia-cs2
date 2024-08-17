@@ -62,6 +62,9 @@ struct Variables_t
 	C_ADD_VARIABLE(bool, bVisualChamsIgnoreZ, false); // invisible chams
 	C_ADD_VARIABLE(Color_t, colVisualChams, Color_t(0, 255, 0));
 	C_ADD_VARIABLE(Color_t, colVisualChamsIgnoreZ, Color_t(255, 0, 0));
+	C_ADD_VARIABLE(bool, bThirdperson, false);
+	C_ADD_VARIABLE(float, flThirdpersonDistance, 100.f);
+	C_ADD_VARIABLE(bool, bThirdpersonNoInterp, true);
 #pragma endregion
 
 #pragma region variables_misc
@@ -72,6 +75,11 @@ struct Variables_t
 	C_ADD_VARIABLE(int, nAutoBHopChance, 100);
 
 	C_ADD_VARIABLE(bool, bAutoStrafe, false);
+	C_ADD_VARIABLE(int, bAutoStrafeMode, 0);
+	C_ADD_VARIABLE(float, flAutoStrafeSmooth, 50.f);
+	C_ADD_VARIABLE(bool, bAutoStrafeAssistance, false);
+
+	
 #pragma endregion
 
 #pragma region variables_menu

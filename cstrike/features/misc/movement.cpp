@@ -1,10 +1,15 @@
 #include "movement.h"
 
+// used: sdk
+#include <iostream>
+#include <array>
 // used: sdk entity
 #include "../../sdk/entity.h"
 // used: cusercmd
 #include "../../sdk/datatypes/usercmd.h"
 
+#include "../../sdk/interfaces/ccsgoinput.h"
+#include "../../sdk/datatypes/qangle.h"
 // used: convars
 #include "../../core/convars.h"
 #include "../../sdk/interfaces/ienginecvar.h"
@@ -25,7 +30,7 @@ void F::MISC::MOVEMENT::OnMove(CUserCmd* pCmd, CBaseUserCmdPB* pBaseCmd, CCSPlay
 		return;
 
 	BunnyHop(pCmd, pBaseCmd, pLocalPawn);
-	AutoStrafe(pBaseCmd, pLocalPawn);
+	AutoStrafe(pCmd, pBaseCmd, pLocalPawn, 0);
 
 	// loop through all tick commands
 	for (int nSubTick = 0; nSubTick < pCmd->csgoUserCmd.inputHistoryField.pRep->nAllocatedSize; nSubTick++)
@@ -76,13 +81,170 @@ void F::MISC::MOVEMENT::BunnyHop(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSP
 	}
 }
 
-void F::MISC::MOVEMENT::AutoStrafe(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLocalPawn)
+void F::MISC::MOVEMENT::AutoStrafe(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLocalPawn, int type)
 {
-	if (!C_GET(bool, Vars.bAutoStrafe) || pLocalPawn->GetFlags() & FL_ONGROUND)
+	static uint64_t last_pressed = 0;
+	static uint64_t last_buttons = 0;
+
+	if (!C_GET(bool, Vars.bAutoStrafe))
 		return;
 
-	pUserCmd->SetBits(EBaseCmdBits::BASE_BITS_LEFTMOVE);
-	pUserCmd->flSideMove = pUserCmd->nMousedX > 0 ? -1.0f : 1.0f; // a bit yanky, but works
+	auto& cmd = I::Input->arrCommands[I::Input->nSequenceNumber % 150];
+	bool strafe_assist = C_GET(bool, Vars.bAutoStrafeAssistance);
+	const auto current_buttons = cmd.nButtons.nValue;
+	auto yaw = MATH::normalize_yaw(pUserCmd->pViewAngles->angValue.y);
+
+	const auto check_button = [&](const uint64_t button)
+	{
+		if (current_buttons & button && (!(last_buttons & button) || button & IN_MOVELEFT && !(last_pressed & IN_MOVERIGHT) || button & IN_MOVERIGHT && !(last_pressed & IN_MOVELEFT) || button & IN_FORWARD && !(last_pressed & IN_BACK) || button & IN_BACK && !(last_pressed & IN_FORWARD)))
+		{
+			if (strafe_assist)
+			{
+				if (button & IN_MOVELEFT)
+					last_pressed &= ~IN_MOVERIGHT;
+				else if (button & IN_MOVERIGHT)
+					last_pressed &= ~IN_MOVELEFT;
+				else if (button & IN_FORWARD)
+					last_pressed &= ~IN_BACK;
+				else if (button & IN_BACK)
+					last_pressed &= ~IN_FORWARD;
+			}
+
+			last_pressed |= button;
+		}
+		else if (!(current_buttons & button))
+			last_pressed &= ~button;
+	};
+
+	check_button(IN_MOVELEFT);
+	check_button(IN_MOVERIGHT);
+	check_button(IN_FORWARD);
+	check_button(IN_BACK);
+
+	last_buttons = current_buttons;
+
+	const auto velocity = pLocalPawn->GetAbsVelocity();
+	bool wasdstrafe = (C_GET(int, Vars.bAutoStrafeMode) == 0);
+	bool viewanglestrafe = (C_GET(int, Vars.bAutoStrafeMode) == 1);
+	float smoothing = (C_GET(float, Vars.flAutoStrafeSmooth));
+
+	/*const auto weapon = pLocalPawn->get_weapon_services_ptr()->get_h_active_weapon().get();
+	const auto js = weapon && (cfg.weapon_config.is_scout && cfg.weapon_config.cur.scout_jumpshot && pLocalPawn->get_vec_abs_velocity().length_2d() < 50.f);
+	const auto throwing_nade = weapon && weapon->is_grenade() && ticks_to_time(local_player->get_tickbase()) >= weapon->get_throw_time() && weapon->get_throw_time() != 0.f;
+
+	if (js)
+		return;*/
+
+	if (pLocalPawn->GetFlags() & FL_ONGROUND)
+		return;
+
+	auto rotate_movement = [](CUserCmd& cmd, float target_yaw)
+	{
+		auto pUserCmd = cmd.csgoUserCmd.pBaseCmd;
+
+		const float rot = M_DEG2RAD(pUserCmd->pViewAngles->angValue.y - target_yaw);
+
+		const float new_forward = std::cos(rot) * pUserCmd->flForwardMove - std::sin(rot) * pUserCmd->flSideMove;
+		const float new_side = std::sin(rot) * pUserCmd->flForwardMove + std::cos(rot) * pUserCmd->flSideMove;
+
+		cmd.nButtons.nValue &= ~(IN_BACK | IN_FORWARD | IN_MOVELEFT | IN_MOVERIGHT);
+		pUserCmd->flForwardMove = MATH::clamp(new_forward, -1.f, 1.f);
+		pUserCmd->flSideMove = MATH::clamp(new_side * -1.f, -1.f, 1.f);
+
+		if (pUserCmd->flForwardMove > 0.f)
+			cmd.nButtons.nValue |= IN_FORWARD;
+		else if (pUserCmd->flForwardMove < 0.f)
+			cmd.nButtons.nValue |= IN_BACK;
+
+		if (pUserCmd->flSideMove > 0.f)
+			cmd.nButtons.nValue |= IN_MOVELEFT;
+		else if (pUserCmd->flSideMove < 0.f)
+			cmd.nButtons.nValue |= IN_MOVERIGHT;
+	};
+
+	if (wasdstrafe)
+	{
+		auto offset = 0.f;
+		if (last_pressed & IN_MOVELEFT)
+			offset += 90.f;
+		if (last_pressed & IN_MOVERIGHT)
+			offset -= 90.f;
+		if (last_pressed & IN_FORWARD)
+			offset *= 0.5f;
+		else if (last_pressed & IN_BACK)
+			offset = -offset * 0.5f + 180.f;
+
+		yaw += offset;
+
+		pUserCmd->flForwardMove = 0.f;
+		pUserCmd->flSideMove = 0.f;
+
+		rotate_movement(cmd, MATH::normalize_yaw(yaw));
+
+		if (!viewanglestrafe && offset == 0.f)
+			return;
+	}
+
+	if (pUserCmd->flSideMove != 0.0f || pUserCmd->flForwardMove != 0.0f)
+		return;
+
+	auto velocity_angle = M_RAD2DEG(std::atan2f(velocity.y, velocity.x));
+	if (velocity_angle < 0.0f)
+		velocity_angle += 360.0f;
+
+	if (velocity_angle < 0.0f)
+		velocity_angle += 360.0f;
+
+	velocity_angle -= floorf(velocity_angle / 360.0f + 0.5f) * 360.0f;
+
+	const auto speed = velocity.Length2D();
+	const auto ideal = MATH::clamp(M_RAD2DEG(std::atan2(15.f, speed)), 0.f, 45.f);
+
+	const auto correct = (100.f - smoothing) * 0.02f * (ideal + ideal);
+
+	pUserCmd->flForwardMove = 0.f;
+	const auto velocity_delta = MATH::normalize_yaw(yaw - velocity_angle);
+
+	/*if (throwing_nade && fabsf(velocity_delta) <=20.f)
+	{
+		auto &wish_angle = antiaim::wish_angles[globals::current_cmd->command_number % 150];
+		wish_angle.y = math::normalize_yaw(yaw);
+		globals::current_cmd->forwardmove = 450.f;
+
+		antiaim::fix_movement(globals::current_cmd);
+		return;
+	}*/
+
+	if (fabsf(velocity_delta) > 170.f && speed > 80.f || velocity_delta > correct && speed > 80.f)
+	{
+		yaw = correct + velocity_angle;
+		pUserCmd->flSideMove = -1.f;
+		rotate_movement(cmd, MATH::normalize_yaw(yaw));
+		return;
+	}
+	const bool side_switch = I::Input->nSequenceNumber % 2 == 0;
+
+	if (-correct <= velocity_delta || speed <= 80.f)
+	{
+		if (side_switch)
+		{
+			yaw = yaw - ideal;
+			pUserCmd->flSideMove = -1.f;
+		}
+		else
+		{
+			yaw = ideal + yaw;
+			pUserCmd->flSideMove = 1.f;
+		}
+		rotate_movement(cmd, MATH::normalize_yaw(yaw));
+	}
+	else
+	{
+		yaw = velocity_angle - correct;
+		pUserCmd->flSideMove = 1.f;
+
+		rotate_movement(cmd, MATH::normalize_yaw(yaw));
+	}
 }
 
 void F::MISC::MOVEMENT::ValidateUserCommand(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, CCSGOInputHistoryEntryPB* pInputEntry)

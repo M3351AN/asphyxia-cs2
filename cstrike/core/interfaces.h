@@ -5,6 +5,8 @@
 // used: globalvariables
 #include "../sdk/interfaces/iglobalvars.h"
 
+#include <d3d11.h>
+
 #pragma region sdk_definitons
 #define GAME_RESOURCE_SERVICE_CLIENT CS_XOR("GameResourceServiceClientV00")
 #define SOURCE2_CLIENT CS_XOR("Source2Client00")
@@ -57,6 +59,7 @@ namespace I
 	void CreateRenderTarget();
 	void DestroyRenderTarget();
 
+	inline ID3D11ShaderResourceView* Shigure = nullptr;
 	inline IMemAlloc* MemAlloc = nullptr;
 	inline ISwapChainDx11* SwapChain = nullptr;
 	inline ID3D11Device* Device = nullptr;

@@ -41,6 +41,17 @@ static constexpr const char* arrMenuAddition[] = {
 	"particle",
 	"glow"
 };
+
+enum wep_type : int
+{
+	PISTOL = 1,
+	HEAVY_PISTOL = 2,
+	ASSULT = 3,
+	SNIPERS = 4,
+	SCOUT = 5,
+	AWP = 6,
+};
+
 #pragma endregion
 
 void MENU::RenderMainWindow()
@@ -826,7 +837,7 @@ void menu::render()
 		{
 			ImGui::Checkbox(CS_XOR("enable##aimbot"), &C_GET(bool, Vars.bLegitbot));
 			ImGui::SliderFloat(CS_XOR("aim range"), &C_GET(float, Vars.flAimRange), 0.f, 135.f);
-			ImGui::SliderFloat(CS_XOR("smooth"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
+			ImGui::SliderFloat(CS_XOR("smooth##aimbot"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
 
 			ImGui::NewLine();
 			ImGui::Checkbox(CS_XOR("silent"), &C_GET(bool, Vars.bSilentbot));
@@ -876,6 +887,13 @@ void menu::render()
 				ImGui::Checkbox(CS_XOR("armor bar"), &C_GET(BarOverlayVar_t, Vars.overlayArmorBar).bEnable);
 			}
 			ImGui::EndDisabled();
+			ImGui::NewLine();
+			ImGui::Checkbox(CS_XOR("chams##chams"), &C_GET(bool, Vars.bVisualChams));
+			ImGui::ColorEdit4(CS_XOR("##visiblecolor"), &C_GET(Color_t, Vars.colVisualChams));
+			ImGui::Checkbox(CS_XOR("invisible chams##chams"), &C_GET(bool, Vars.bVisualChamsIgnoreZ));
+			if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
+				ImGui::ColorEdit4(CS_XOR("##invisiblecolor"), &C_GET(Color_t, Vars.colVisualChamsIgnoreZ));
+			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("flat\0glow\0"));
 
 			ImGui::PopStyleVar();
 
@@ -885,16 +903,14 @@ void menu::render()
 
 		ImGui::SameLine();
 
-		ImGui::BeginChild(CS_XOR("Chams"), child_size);
+		ImGui::BeginChild(CS_XOR("World"), child_size);
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
-
-			ImGui::Checkbox(CS_XOR("enable##chams"), &C_GET(bool, Vars.bVisualChams));
-			ImGui::ColorEdit4(CS_XOR("##visiblecolor"), &C_GET(Color_t, Vars.colVisualChams));
-			ImGui::Checkbox(CS_XOR("enable invisible chams##chams"), &C_GET(bool, Vars.bVisualChamsIgnoreZ));
-			if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
-				ImGui::ColorEdit4(CS_XOR("##invisiblecolor"), &C_GET(Color_t, Vars.colVisualChamsIgnoreZ));
-			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("white\0illuminate\0"));
+			Checkbox(CS_XOR("thirdperson"), &C_GET(bool, Vars.bThirdperson));
+			if (C_GET(bool, Vars.bThirdperson))
+			{
+				SliderFloat(CS_XOR("distance"), &C_GET(float, Vars.flThirdpersonDistance), 0.f, 150.f, CS_XOR("%.1f%"), ImGuiSliderFlags_NoInput);
+			}
 
 			ImGui::PopStyleVar();
 		}
@@ -912,7 +928,8 @@ void menu::render()
 
 			ImDrawList* pDrawList = ImGui::GetWindowDrawList();
 			Context_t context;
-
+			ImGui::SetCursorPos(ImVec2{ 20, 40 });
+			ImGui::Image((void*)I::Shigure, ImVec2{ 160, 220 });
 			ImVec4 vecBox = {
 				vecWindowPos.x + vecOverlayPadding.x,
 				vecWindowPos.y + vecOverlayPadding.y,
@@ -928,7 +945,7 @@ void menu::render()
 			}
 
 			if (const auto& nameOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayName); nameOverlayConfig.bEnable)
-				context.AddComponent(new CTextComponent(true, SIDE_TOP, DIR_TOP, FONT::pVisual, CS_XOR("TokiKiri"), Vars.overlayName));
+				context.AddComponent(new CTextComponent(true, SIDE_TOP, DIR_TOP, FONT::pVisual, CS_XOR("\u6642\u96e8\u005b\u3057\u3050\u308c\u005d\u0421\u0445\u0438\u0433\u0443\u0440\u0435"), Vars.overlayName));
 
 			if (const auto& healthOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayHealthBar); healthOverlayConfig.bEnable)
 			{
@@ -960,6 +977,7 @@ void menu::render()
 
 				ImGui::EndPopup();
 			}
+
 		}
 		ImGui::EndChild();
 		ImGui::EndTabItem();
@@ -974,9 +992,9 @@ void menu::render()
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
 
 			ImGui::Checkbox(CS_XOR("watermark"), &C_GET(bool, Vars.bWatermark));
-
+			Checkbox(CS_XOR("Anti untrusted"), &C_GET(bool, Vars.bAntiUntrusted));
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 0.f, 1.f));
-			if (ImGui::Button(CS_XOR("unlock hidden cvars"), ImVec2(-1, 15 * MENU::flDpiScale)))
+			if (ImGui::Button(CS_XOR("unlock hidden cvars"), ImVec2(child_size.x - 10.f, 35.f)))
 			{
 				I::Cvar->UnlockHiddenCVars();
 				NOTIFY::Push({ N_TYPE_INFO, CS_XOR("unlocked all hidden cvars") });
@@ -997,9 +1015,15 @@ void menu::render()
 			ImGui::Checkbox(CS_XOR("auto bunny-hopping"), &C_GET(bool, Vars.bAutoBHop));
 			if (C_GET(bool, Vars.bAutoBHop))
 				ImGui::SliderInt(CS_XOR("chance"), &C_GET(int, Vars.nAutoBHopChance), 0, 100, CS_XOR("%d%%"));
-
+			
 			ImGui::Checkbox(CS_XOR("auto strafe"), &C_GET(bool, Vars.bAutoStrafe));
-
+			ImGui::BeginDisabled();
+			{
+				ImGui::Combo(CS_XOR("strafe mode"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("directional\0viewangle\0"));
+			}
+			ImGui::EndDisabled();
+			ImGui::SliderFloat(CS_XOR("smooth"), &C_GET(float, Vars.flAutoStrafeSmooth), 1.f, 100.f);
+			ImGui::Checkbox(CS_XOR("strafe assistance"), &C_GET(bool, Vars.bAutoStrafeAssistance));
 			ImGui::PopStyleVar();
 		}
 		ImGui::EndChild();

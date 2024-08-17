@@ -5432,7 +5432,8 @@ bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size_arg, b
 		PopStyleVar();
 
 		RenderText(parent_window->DC.CursorPos + ImVec2(20.f, space_sz - (label_size.y / 2)), name);
-		SetCursorPosY(GetCursorPosY() + space_sz + (label_size.y / 2) + g.Style.ItemSpacing.y + g.Style.FramePadding.y * 2);
+		//SetCursorPosY(GetCursorPosY() + space_sz + (label_size.y / 2) + g.Style.ItemSpacing.y + g.Style.FramePadding.y * 2);
+		Dummy(ImVec2{ g.Style.ItemSpacing.x + g.Style.FramePadding.x * 2, GetCursorPosY() + space_sz + (label_size.y / 2) + g.Style.ItemSpacing.y + g.Style.FramePadding.y * 2 });
 		Indent(10.f);
 	}
 	else

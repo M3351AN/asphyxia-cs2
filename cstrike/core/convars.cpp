@@ -159,5 +159,34 @@ bool CONVAR::Setup()
 	sv_autobunnyhopping = I::Cvar->Find(FNV1A::HashConst("sv_autobunnyhopping"));
 	bSuccess &= sv_autobunnyhopping != nullptr;
 
+	cam_idealdist = I::Cvar->Find(FNV1A::HashConst("cam_idealdist")); // flaot
+	bSuccess &= cam_idealdist != nullptr;
+
+	cam_collision = I::Cvar->Find(FNV1A::HashConst("cam_collision")); // flaot
+	bSuccess &= cam_collision != nullptr;
+
+	cam_snapto = I::Cvar->Find(FNV1A::HashConst("cam_snapto")); // flaot
+	bSuccess &= cam_snapto != nullptr;
+
+	c_thirdpersonshoulder = I::Cvar->Find(FNV1A::HashConst("c_thirdpersonshoulder")); // flaot
+	bSuccess &= c_thirdpersonshoulder != nullptr;
+
+	c_thirdpersonshoulderaimdist = I::Cvar->Find(FNV1A::HashConst("c_thirdpersonshoulderaimdist")); // flaot
+	bSuccess &= c_thirdpersonshoulderaimdist != nullptr;
+
+	c_thirdpersonshoulderdist = I::Cvar->Find(FNV1A::HashConst("c_thirdpersonshoulderdist")); // flaot
+	bSuccess &= c_thirdpersonshoulderdist != nullptr;
+
+	c_thirdpersonshoulderheight = I::Cvar->Find(FNV1A::HashConst("c_thirdpersonshoulderheight")); // flaot
+	bSuccess &= c_thirdpersonshoulderheight != nullptr;
+
+	c_thirdpersonshoulderoffset = I::Cvar->Find(FNV1A::HashConst("c_thirdpersonshoulderoffset")); // flaot
+	bSuccess &= c_thirdpersonshoulderoffset != nullptr;
+
+	cl_interpolate = I::Cvar->Find(FNV1A::HashConst("cl_interpolate")); // flaot
+	bSuccess &= cl_interpolate != nullptr;
+
+	cl_interp_ratio = I::Cvar->Find(FNV1A::HashConst("cl_interp_ratio")); // flaot
+	bSuccess &= cl_interp_ratio != nullptr;
 	return bSuccess;
 }
