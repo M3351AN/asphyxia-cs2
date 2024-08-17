@@ -420,6 +420,7 @@ bool D::Setup(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 #pragma region draw_setup_style
 	ImGuiStyle& style = ImGui::GetStyle();
 	style.Alpha = 1.0f;
+	/*
 	style.WindowPadding = ImVec2(8, 8);
 	style.WindowRounding = 4.0f;
 	style.WindowBorderSize = 1.0f;
@@ -449,6 +450,7 @@ bool D::Setup(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	style.AntiAliasedFill = true;
 	style.AntiAliasedLinesUseTex = true;
 	style.ColorButtonPosition = ImGuiDir_Right;
+	*/
 #pragma endregion
 
 	ImGuiIO& io = ImGui::GetIO();

@@ -783,14 +783,33 @@ void menu::render()
 	MENU::flDpiScale = D::CalculateDPI(C_GET(int, Vars.nDpiScale));
 	if (!MENU::bMainWindowOpened)
 		return;
+	const ImVec2 vecScreenSize = io.DisplaySize;
+	const float flBackgroundAlpha = MENU::animMenuDimBackground.GetValue(1.f);
+	MENU::flDpiScale = D::CalculateDPI(C_GET(int, Vars.nDpiScale));
+
+	// @note: we call this every frame because we utilizing rainbow color as well! however it's not really performance friendly?
 	MENU::UpdateStyle(&style);
+
+	if (flBackgroundAlpha > 0.f)
+	{
+		if (C_GET(unsigned int, Vars.bMenuAdditional) & MENU_ADDITION_DIM_BACKGROUND)
+			D::AddDrawListRect(ImGui::GetBackgroundDrawList(), ImVec2(0, 0), vecScreenSize, C_GET(ColorPickerVar_t, Vars.colPrimtv1).colValue.Set<COLOR_A>(125 * flBackgroundAlpha), DRAW_RECT_FILLED);
+
+		if (C_GET(unsigned int, Vars.bMenuAdditional) & MENU_ADDITION_BACKGROUND_PARTICLE)
+			MENU::menuParticle.Render(ImGui::GetBackgroundDrawList(), vecScreenSize, flBackgroundAlpha);
+	}
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(720, 355));
 
 	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x / 2.f, io.DisplaySize.y / 2.f), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 	ImGui::SetNextWindowSize(ImVec2(720 * MENU::flDpiScale, 355 * MENU::flDpiScale), ImGuiCond_Always);
-	if (!ImGui::Begin(CS_XOR("Nixware"), NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
-		return;
+	ImGui::Begin(CS_XOR("TokiKiri"), NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse);
+		
+	const ImVec2 vecMenuPos = ImGui::GetWindowPos();
+	const ImVec2 vecMenuSize = ImGui::GetWindowSize();
+	ImDrawList* pDrawList = ImGui::GetWindowDrawList();
+	if (C_GET(unsigned int, Vars.bMenuAdditional) & MENU_ADDITION_GLOW)
+		D::AddDrawListShadowRect(ImGui::GetBackgroundDrawList(), vecMenuPos, vecMenuPos + vecMenuSize, C_GET(ColorPickerVar_t, Vars.colAccent0).colValue, 64.f * MENU::flDpiScale, style.WindowRounding, ImDrawFlags_ShadowCutOutShapeBackground);
 
 	ImGui::BeginTabBar(CS_XOR("Tabs"));
 
@@ -882,7 +901,8 @@ void menu::render()
 		ImGui::EndChild();
 
 		ImGui::SameLine();
-		const ImVec2 vecOverlayPadding = ImVec2(15.f * MENU::flDpiScale, 25.f * MENU::flDpiScale);
+
+		const ImVec2 vecOverlayPadding = ImVec2(30.f * MENU::flDpiScale, 30.f * MENU::flDpiScale);
 
 		ImGui::BeginChild(CS_XOR("Preview"), child_size);
 		{
@@ -908,7 +928,7 @@ void menu::render()
 			}
 
 			if (const auto& nameOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayName); nameOverlayConfig.bEnable)
-				context.AddComponent(new CTextComponent(true, SIDE_TOP, DIR_TOP, FONT::pVisual, CS_XOR("asphyxia"), Vars.overlayName));
+				context.AddComponent(new CTextComponent(true, SIDE_TOP, DIR_TOP, FONT::pVisual, CS_XOR("TokiKiri"), Vars.overlayName));
 
 			if (const auto& healthOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayHealthBar); healthOverlayConfig.bEnable)
 			{
