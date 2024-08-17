@@ -49,6 +49,22 @@ QAngle_t GetRecoil(CBaseUserCmdPB* pCmd,C_CSPlayerPawn* pLocal)
 	}
 }
 
+QAngle_t GetRecoil(CBaseUserCmdPB* pCmd,C_CSPlayerPawn* pLocal)
+{
+	static QAngle_t OldPunch;//get last tick AimPunch angles
+	if (pLocal->GetShotsFired() >= 1)//only update aimpunch while shooting
+	{
+		QAngle_t viewAngles = pCmd->pViewAngles->angValue;
+		QAngle_t delta = viewAngles - (viewAngles + (OldPunch - (pLocal->GetAimPuchAngle() * 2.f)));//get current AimPunch angles delta
+
+		return pLocal->GetAimPuchAngle() * 2.0f;//return correct aimpunch delta
+	}
+	else
+	{
+		return QAngle_t{ 0, 0 ,0};//return 0 if is not shooting
+	}
+}
+
 QAngle_t GetAngularDifference(CBaseUserCmdPB* pCmd, Vector_t vecTarget, C_CSPlayerPawn* pLocal)
 {
 	// The current position
@@ -193,6 +209,7 @@ void F::LEGITBOT::AIM::AimAssist(CBaseUserCmdPB* pUserCmd, C_CSPlayerPawn* pLoca
 
 	// Get the smoothing
 	const float flSmoothing = C_GET(float, Vars.flSmoothing);
+
 	// Apply smoothing and set angles
 	pViewAngles->x += (vNewAngles.x - aimPunch.x ) / flSmoothing; // minus AimPunch angle to counteract recoil
 	pViewAngles->y += (vNewAngles.y - aimPunch.y ) / flSmoothing;
