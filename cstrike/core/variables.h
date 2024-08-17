@@ -113,8 +113,15 @@ struct Variables_t
 	C_ADD_VARIABLE(bool, bLegitbot, false);
 	C_ADD_VARIABLE(float, flAimRange, 10.0f);
 	C_ADD_VARIABLE(float, flSmoothing, 10.0f);
+	C_ADD_VARIABLE(bool, bSilentbot, false);
+	C_ADD_VARIABLE(float, flSilentRange, 1.0f);
 	C_ADD_VARIABLE(bool, bLegitbotAlwaysOn, false);
 	C_ADD_VARIABLE(unsigned int, nLegitbotActivationKey, VK_HOME);
+	C_ADD_VARIABLE(bool, bRCS, false);
+	C_ADD_VARIABLE(float, flRCSPitch, 0.0f);
+	C_ADD_VARIABLE(float, flRCSYaw, 0.0f);
+	C_ADD_VARIABLE(float, flRCSSmooth, 5.0f);
+
 #pragma endregion
 };
 

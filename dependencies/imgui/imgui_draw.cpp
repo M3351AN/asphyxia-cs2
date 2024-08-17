@@ -179,6 +179,8 @@ void ImGui::StyleColorsDark(ImGuiStyle* dst)
     ImVec4* colors = style->Colors;
 
     colors[ImGuiCol_Text]                   = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+	colors[ImGuiCol_TextActive]				= ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+	colors[ImGuiCol_TextHovered]			= ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
     colors[ImGuiCol_TextDisabled]           = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
     colors[ImGuiCol_WindowBg]               = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
     colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
@@ -240,6 +242,8 @@ void ImGui::StyleColorsClassic(ImGuiStyle* dst)
     ImVec4* colors = style->Colors;
 
     colors[ImGuiCol_Text]                   = ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
+	colors[ImGuiCol_TextActive]				= ImVec4(0.90f, 0.90f, 0.90f, 1.00f);
+	colors[ImGuiCol_TextHovered]			= ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
     colors[ImGuiCol_TextDisabled]           = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
     colors[ImGuiCol_WindowBg]               = ImVec4(0.00f, 0.00f, 0.00f, 0.85f);
     colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
@@ -302,6 +306,8 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
     ImVec4* colors = style->Colors;
 
     colors[ImGuiCol_Text]                   = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
+	colors[ImGuiCol_TextActive]				= ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
+	colors[ImGuiCol_TextHovered]			= ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
     colors[ImGuiCol_TextDisabled]           = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
     colors[ImGuiCol_WindowBg]               = ImVec4(0.94f, 0.94f, 0.94f, 1.00f);
     colors[ImGuiCol_ChildBg]                = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
@@ -1458,7 +1464,7 @@ void ImDrawList::AddRectFilledMultiColor(const ImVec2& p_min, const ImVec2& p_ma
     PrimWriteVtx(ImVec2(p_min.x, p_max.y), uv, col_bot_left);
 }
 
-// modified by asphyxia
+// modified by TokiKiri
 void ImDrawList::AddRectFilledMultiColorRounded(const ImVec2& p_min, const ImVec2& p_max, ImU32 col_upr_left, ImU32 col_upr_right, ImU32 col_bot_right, ImU32 col_bot_left, float rounding, ImDrawFlags flags)
 {
     if (((col_upr_left | col_upr_right | col_bot_right | col_bot_left) & IM_COL32_A_MASK) == 0)
@@ -1698,7 +1704,7 @@ void ImDrawList::AddText(const ImVec2& pos, ImU32 col, const char* text_begin, c
     AddText(NULL, 0.0f, pos, col, text_begin, text_end);
 }
 
-// modified by asphyxia
+// modified by TokiKiri
 void ImDrawList::AddMultiColorText(const ImFont* pFont, const float flFontSize, const ImVec2& vecPosition, const char* szText, const ImU32 colRight, const ImU32 colLeft)
 {
 	if (colRight == colLeft)
@@ -3975,6 +3981,22 @@ const ImWchar*  ImFontAtlas::GetGlyphRangesChineseFull()
         0,
     };
     return &ranges[0];
+}
+
+const ImWchar* ImFontAtlas::GetGlyphRangesESP()
+{
+	static const ImWchar ranges[] = {
+		0x0020,0x00FF, // Basic Latin + Latin Supplement
+		0x0400,0x052F, // Cyrillic + Cyrillic Supplement
+		0x2000,0x206F, // General Punctuation
+		0x3000,0x30FF, // CJK Symbols and Punctuations, Hiragana, Katakana
+		//0x31F0,0x31FF, // Katakana Phonetic Extensions(NOT NECESSARY?)
+		0xFF00,0xFFEF, // Half-width characters
+		0xFFFD,0xFFFD, // Invalid
+		0x4e00,0x9FAF, // CJK Ideograms
+		0,
+	};
+	return &ranges[0];
 }
 
 static void UnpackAccumulativeOffsetsIntoRanges(int base_codepoint, const short* accumulative_offsets, int accumulative_offsets_count, ImWchar* out_ranges)

@@ -32,6 +32,8 @@
 // used: hkIsRelativeMouseMode.GetOriginal();
 #include "../core/hooks.h"
 
+#include "../../resources/HarmonySans.h"
+
 #pragma region imgui_extended
 static constexpr const char* arrKeyNames[] = {
 	"",
@@ -95,7 +97,7 @@ bool ImGui::HotKey(const char* szLabel, unsigned int* pValue)
 	if (!ItemAdd(rectTotal, nIndex, &rectFrame))
 		return false;
 
-	const bool bHovered = ItemHoverable(rectFrame, nIndex, ImGuiItemFlags_None);
+	const bool bHovered = ItemHoverable(rectFrame, nIndex);
 	if (bHovered)
 	{
 		SetHoveredID(nIndex);
@@ -462,17 +464,17 @@ bool D::Setup(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	imVerdanaConfig.FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
 	for (int i = 0; i < CS_ARRAYSIZE(FONT::pMenu); i++)
 	{
-		const float flFontSize = 12.f * CalculateDPI(i);
-		FONT::pMenu[i] = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\Verdana.ttf"), flFontSize, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
+		const float flFontSize = 14.f * CalculateDPI(i);
+		FONT::pMenu[i] = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), flFontSize, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
 		io.Fonts->AddFontFromMemoryTTF((void*)fa_solid_900, sizeof(fa_solid_900), flFontSize, &icons_config, icons_ranges);
 	}
 
 	imVerdanaConfig.FontBuilderFlags = ImGuiFreeTypeBuilderFlags_Bold;
-	FONT::pExtra = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\Verdana.ttf"), 14.f, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
+	FONT::pExtra = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), 14.f, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
 
 	ImFontConfig imTahomaConfig;
 	imTahomaConfig.FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
-	FONT::pVisual = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\Tahoma.ttf"), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesCyrillic());
+	FONT::pVisual = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesChineseFull());
 
 	io.Fonts->FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
 	bInitialized = io.Fonts->Build();

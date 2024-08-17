@@ -355,28 +355,60 @@ void T::RageBot()
 
 void T::LegitBot()
 {
-	ImGui::BeginChild(CS_XOR("legitbot.aimbot"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImGui::Columns(2, CS_XOR("##legit_collumns"), false);
 	{
-		if (ImGui::BeginMenuBar())
+		ImGui::BeginChild(CS_XOR("legitbot.aimbot"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
 		{
-			ImGui::TextUnformatted(CS_XOR("aimbot"));
-			ImGui::EndMenuBar();
-		}
+			if (ImGui::BeginMenuBar())
+			{
+				ImGui::TextUnformatted(CS_XOR("aimbot"));
+				ImGui::EndMenuBar();
+			}
 
-		ImGui::Checkbox(CS_XOR("enable##aimbot"), &C_GET(bool, Vars.bLegitbot));
-		ImGui::SliderFloat(CS_XOR("aim range"), &C_GET(float, Vars.flAimRange), 1.f, 135.f);
-		ImGui::SliderFloat(CS_XOR("smoothing"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
+			ImGui::Checkbox(CS_XOR("enable##aimbot"), &C_GET(bool, Vars.bLegitbot));
+			ImGui::SliderFloat(CS_XOR("aim range"), &C_GET(float, Vars.flAimRange), 0.f, 135.f);
+			ImGui::SliderFloat(CS_XOR("smooth"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
 
-		ImGui::NewLine();
-		// Key
-		ImGui::Checkbox(CS_XOR("always on##aimbot"), &C_GET(bool, Vars.bLegitbotAlwaysOn));
-		ImGui::BeginDisabled(C_GET(bool, Vars.bLegitbotAlwaysOn));
-		{
-			ImGui::HotKey(CS_XOR("toggle key"), &C_GET(unsigned int, Vars.nLegitbotActivationKey));
+			ImGui::NewLine();
+			ImGui::Checkbox(CS_XOR("silent"), &C_GET(bool, Vars.bSilentbot));
+			if (C_GET(bool, Vars.bSilentbot))
+				ImGui::SliderFloat(CS_XOR("silent range"), &C_GET(float, Vars.flSilentRange), 0.f, 5.f);
+
+			ImGui::NewLine();
+			// Key
+			ImGui::Checkbox(CS_XOR("always on##aimbot"), &C_GET(bool, Vars.bLegitbotAlwaysOn));
+			ImGui::BeginDisabled(C_GET(bool, Vars.bLegitbotAlwaysOn));
+			{
+				ImGui::HotKey(CS_XOR("toggle key"), &C_GET(unsigned int, Vars.nLegitbotActivationKey));
+			}
+			ImGui::EndDisabled();
 		}
-		ImGui::EndDisabled();
+		ImGui::EndChild();
+
 	}
-	ImGui::EndChild();
+	ImGui::NextColumn();
+	{ /*
+		ImGui::BeginChild(CS_XOR("legitbot.RCS"), ImVec2{}, true, ImGuiWindowFlags_MenuBar);
+		{
+			if (ImGui::BeginMenuBar())
+			{
+				ImGui::TextUnformatted(CS_XOR("RCS"));
+				ImGui::EndMenuBar();
+			}
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("standalone RCS"), &C_GET(bool, Vars.bRCS));
+			ImGui::SliderFloat(CS_XOR("pitch scale"), &C_GET(float, Vars.flRCSPitch), 0.f, 2.f);
+			ImGui::SliderFloat(CS_XOR("yaw scale"), &C_GET(float, Vars.flRCSYaw), 0.f, 2.f);
+			ImGui::SliderFloat(CS_XOR("smooth"), &C_GET(float, Vars.flRCSSmooth), 1.f, 100.f);
+
+			ImGui::PopStyleVar();
+		}
+		ImGui::EndChild();*/
+	}
+	ImGui::Columns(1);
 }
 
 void T::Visuals()
@@ -743,3 +775,391 @@ void MENU::ParticleContext_t::ResolveScreenCollision(ParticleData_t& particle, c
 }
 
 #pragma endregion
+
+void menu::render()
+{
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuiStyle& style = ImGui::GetStyle();
+	MENU::flDpiScale = D::CalculateDPI(C_GET(int, Vars.nDpiScale));
+	if (!MENU::bMainWindowOpened)
+		return;
+	MENU::UpdateStyle(&style);
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(720, 355));
+
+	ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x / 2.f, io.DisplaySize.y / 2.f), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+	ImGui::SetNextWindowSize(ImVec2(720 * MENU::flDpiScale, 355 * MENU::flDpiScale), ImGuiCond_Always);
+	if (!ImGui::Begin(CS_XOR("Nixware"), NULL, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
+		return;
+
+	ImGui::BeginTabBar(CS_XOR("Tabs"));
+
+	if (ImGui::BeginTabItem(CS_XOR("rage")))
+	{
+		ImGui::EndTabItem();
+	}
+
+	if (ImGui::BeginTabItem(CS_XOR("legit")))
+	{
+		ImVec2 child_size = ImVec2((ImGui::GetColumnWidth() - (style.ItemSpacing.x * 2)) / 3, ImGui::GetWindowHeight() - (ImGui::GetCursorPosY() + style.ItemInnerSpacing.y * 2));
+
+		ImGui::BeginChild(CS_XOR("Globals"), child_size);
+		{
+			ImGui::Checkbox(CS_XOR("enable##aimbot"), &C_GET(bool, Vars.bLegitbot));
+			ImGui::SliderFloat(CS_XOR("aim range"), &C_GET(float, Vars.flAimRange), 0.f, 135.f);
+			ImGui::SliderFloat(CS_XOR("smooth"), &C_GET(float, Vars.flSmoothing), 1.f, 100.f);
+
+			ImGui::NewLine();
+			ImGui::Checkbox(CS_XOR("silent"), &C_GET(bool, Vars.bSilentbot));
+			if (C_GET(bool, Vars.bSilentbot))
+				ImGui::SliderFloat(CS_XOR("silent range"), &C_GET(float, Vars.flSilentRange), 0.f, 5.f);
+
+			ImGui::NewLine();
+			// Key
+			ImGui::Checkbox(CS_XOR("always on##aimbot"), &C_GET(bool, Vars.bLegitbotAlwaysOn));
+			ImGui::BeginDisabled(C_GET(bool, Vars.bLegitbotAlwaysOn));
+			{
+				ImGui::HotKey(CS_XOR("toggle key"), &C_GET(unsigned int, Vars.nLegitbotActivationKey));
+			}
+			ImGui::EndDisabled();
+		}
+		ImGui::EndChild();
+
+
+		ImGui::SameLine();
+
+		ImGui::BeginChild(CS_XOR("Visuals"), child_size);
+		{
+
+		}
+		ImGui::EndChild();
+
+		ImGui::EndTabItem();
+	}
+
+	if (ImGui::BeginTabItem(CS_XOR("visuals")))
+	{
+		ImVec2 child_size = ImVec2((ImGui::GetColumnWidth() - (style.ItemSpacing.x * 2)) / 3, ImGui::GetWindowHeight() - (ImGui::GetCursorPosY() + style.ItemInnerSpacing.y * 2));
+		static float flOverlayChildSize = 0.f;
+
+		ImGui::BeginChild(CS_XOR("ESP"), child_size);
+		{
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("enable##overlay"), &C_GET(bool, Vars.bVisualOverlay));
+
+			ImGui::BeginDisabled(!C_GET(bool, Vars.bVisualOverlay));
+			{
+				ImGui::Checkbox(CS_XOR("bounding box"), &C_GET(FrameOverlayVar_t, Vars.overlayBox).bEnable);
+				ImGui::Checkbox(CS_XOR("name"), &C_GET(TextOverlayVar_t, Vars.overlayName).bEnable);
+				ImGui::Checkbox(CS_XOR("health bar"), &C_GET(BarOverlayVar_t, Vars.overlayHealthBar).bEnable);
+				ImGui::Checkbox(CS_XOR("armor bar"), &C_GET(BarOverlayVar_t, Vars.overlayArmorBar).bEnable);
+			}
+			ImGui::EndDisabled();
+
+			ImGui::PopStyleVar();
+
+			flOverlayChildSize = ImGui::GetCursorPosY() + style.ItemSpacing.y;
+		}
+		ImGui::EndChild();
+
+		ImGui::SameLine();
+
+		ImGui::BeginChild(CS_XOR("Chams"), child_size);
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("enable##chams"), &C_GET(bool, Vars.bVisualChams));
+			ImGui::ColorEdit4(CS_XOR("##visiblecolor"), &C_GET(Color_t, Vars.colVisualChams));
+			ImGui::Checkbox(CS_XOR("enable invisible chams##chams"), &C_GET(bool, Vars.bVisualChamsIgnoreZ));
+			if (C_GET(bool, Vars.bVisualChamsIgnoreZ))
+				ImGui::ColorEdit4(CS_XOR("##invisiblecolor"), &C_GET(Color_t, Vars.colVisualChamsIgnoreZ));
+			ImGui::Combo(CS_XOR("materials"), &C_GET(int, Vars.nVisualChamMaterial), CS_XOR("white\0illuminate\0"));
+
+			ImGui::PopStyleVar();
+		}
+		ImGui::EndChild();
+
+		ImGui::SameLine();
+		const ImVec2 vecOverlayPadding = ImVec2(15.f * MENU::flDpiScale, 25.f * MENU::flDpiScale);
+
+		ImGui::BeginChild(CS_XOR("Preview"), child_size);
+		{
+			using namespace F::VISUALS::OVERLAY;
+			const ImVec2 vecWindowPos = ImGui::GetWindowPos();
+			const ImVec2 vecWindowSize = ImGui::GetWindowSize();
+
+			ImDrawList* pDrawList = ImGui::GetWindowDrawList();
+			Context_t context;
+
+			ImVec4 vecBox = {
+				vecWindowPos.x + vecOverlayPadding.x,
+				vecWindowPos.y + vecOverlayPadding.y,
+				vecWindowPos.x + vecWindowSize.x - vecOverlayPadding.x,
+				vecWindowPos.y + vecWindowSize.y - vecOverlayPadding.y
+			};
+
+			if (const auto& boxOverlayConfig = C_GET(FrameOverlayVar_t, Vars.overlayBox); boxOverlayConfig.bEnable)
+			{
+				const bool bHovered = context.AddBoxComponent(pDrawList, vecBox, 1, boxOverlayConfig.flThickness, boxOverlayConfig.flRounding, boxOverlayConfig.colPrimary, boxOverlayConfig.colOutline);
+				if (bHovered && ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+					ImGui::OpenPopup(CS_XOR("context##box.component"));
+			}
+
+			if (const auto& nameOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayName); nameOverlayConfig.bEnable)
+				context.AddComponent(new CTextComponent(true, SIDE_TOP, DIR_TOP, FONT::pVisual, CS_XOR("asphyxia"), Vars.overlayName));
+
+			if (const auto& healthOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayHealthBar); healthOverlayConfig.bEnable)
+			{
+				const float flFactor = M_SIN(ImGui::GetTime() * 5.f) * 0.55f + 0.45f;
+				context.AddComponent(new CBarComponent(true, SIDE_LEFT, vecBox, flFactor, Vars.overlayHealthBar));
+			}
+
+			if (const auto& armorOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayArmorBar); armorOverlayConfig.bEnable)
+			{
+				const float flArmorFactor = M_SIN(ImGui::GetTime() * 5.f) * 0.55f + 0.45f;
+				context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, flArmorFactor, Vars.overlayArmorBar));
+			}
+
+			// only render context preview if overlay is enabled
+			context.Render(pDrawList, vecBox);
+
+			if (ImGui::BeginPopup(CS_XOR("context##box.component"), ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+			{
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+				ImGui::ColorEdit4(CS_XOR("primary color##box.component"), &C_GET(FrameOverlayVar_t, Vars.overlayBox).colPrimary);
+				ImGui::ColorEdit4(CS_XOR("outline color##box.component"), &C_GET(FrameOverlayVar_t, Vars.overlayBox).colOutline);
+				ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.75f);
+				ImGui::SliderFloat(CS_XOR("thickness##box.component"), &C_GET(FrameOverlayVar_t, Vars.overlayBox).flThickness, 1.f, 5.f, CS_XOR("%.1f"), ImGuiSliderFlags_AlwaysClamp);
+				ImGui::SetNextItemWidth(ImGui::GetWindowWidth() * 0.75f);
+				ImGui::SliderFloat(CS_XOR("rounding##box.component"), &C_GET(FrameOverlayVar_t, Vars.overlayBox).flRounding, 1.f, 5.f, CS_XOR("%.1f"), ImGuiSliderFlags_AlwaysClamp);
+
+				ImGui::PopStyleVar();
+
+				ImGui::EndPopup();
+			}
+		}
+		ImGui::EndChild();
+		ImGui::EndTabItem();
+	}
+
+	if (BeginTabItem(CS_XOR("miscs")))
+	{
+		ImVec2 child_size = ImVec2((ImGui::GetColumnWidth() - (style.ItemSpacing.x)) / 2, ImGui::GetWindowHeight() - (ImGui::GetCursorPosY() + style.ItemInnerSpacing.y * 2));
+
+		ImGui::BeginChild(CS_XOR("Globals"), child_size);
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("watermark"), &C_GET(bool, Vars.bWatermark));
+
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.f, 1.f, 0.f, 1.f));
+			if (ImGui::Button(CS_XOR("unlock hidden cvars"), ImVec2(-1, 15 * MENU::flDpiScale)))
+			{
+				I::Cvar->UnlockHiddenCVars();
+				NOTIFY::Push({ N_TYPE_INFO, CS_XOR("unlocked all hidden cvars") });
+			}
+
+			ImGui::PopStyleColor();
+
+			ImGui::PopStyleVar();
+		}
+		ImGui::EndChild();
+
+		SameLine();
+
+		ImGui::BeginChild(CS_XOR("Movement"), child_size);
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(style.FramePadding.x, 0));
+
+			ImGui::Checkbox(CS_XOR("auto bunny-hopping"), &C_GET(bool, Vars.bAutoBHop));
+			if (C_GET(bool, Vars.bAutoBHop))
+				ImGui::SliderInt(CS_XOR("chance"), &C_GET(int, Vars.nAutoBHopChance), 0, 100, CS_XOR("%d%%"));
+
+			ImGui::Checkbox(CS_XOR("auto strafe"), &C_GET(bool, Vars.bAutoStrafe));
+
+			ImGui::PopStyleVar();
+		}
+		ImGui::EndChild();
+
+		ImGui::EndTabItem();
+	}
+
+	if (BeginTabItem(CS_XOR("skins")))
+	{
+		EndTabItem();
+	}
+
+	if (BeginTabItem(CS_XOR("settings")))
+	{
+		ImVec2 child_size = ImVec2((GetColumnWidth() - (style.ItemSpacing.x * 2)) / 3, GetWindowHeight() - (GetCursorPosY() + style.ItemInnerSpacing.y * 2));
+
+		BeginChild(CS_XOR("Info"), child_size);
+		{
+			LabelText(CS_XOR("last update:"), __DATE__, __TIME__);
+		}
+		EndChild();
+
+		SameLine();
+
+		BeginChild(CS_XOR("Menu"), child_size);
+		{
+			static int nSelectedColor = 0;
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
+
+			ImGui::HotKey(CS_XOR("menu key"), &C_GET(unsigned int, Vars.nMenuKey));
+
+			if (ImGui::BeginCombo(CS_XOR("dpi scale"), arrMiscDpiScale[C_GET(int, Vars.nDpiScale)]))
+			{
+				for (int i = 0; i < IM_ARRAYSIZE(arrMiscDpiScale); i++)
+				{
+					if (ImGui::Selectable(arrMiscDpiScale[i], (C_GET(int, Vars.nDpiScale) == i)))
+						C_GET(int, Vars.nDpiScale) = i;
+				}
+
+				ImGui::EndCombo();
+			}
+
+			ImGui::MultiCombo(CS_XOR("additional settings"), &C_GET(unsigned int, Vars.bMenuAdditional), arrMenuAddition, CS_ARRAYSIZE(arrMenuAddition));
+
+			ImGui::SliderFloat(CS_XOR("animation speed"), &C_GET(float, Vars.flAnimationSpeed), 1.f, 10.f);
+
+			ImGui::SeparatorText(CS_XOR("colors pallete"));
+
+			ImGui::PushItemWidth(-1);
+
+			if (ImGui::BeginListBox(CS_XOR("##themes.select"), CS_ARRAYSIZE(arrColors), 5))
+			{
+				for (std::size_t i = 0U; i < CS_ARRAYSIZE(arrColors); i++)
+				{
+					const char* szColorName = arrColors[i].first;
+
+					if (ImGui::Selectable(szColorName, (i == nSelectedColor)))
+						nSelectedColor = (int)i;
+				}
+
+				ImGui::EndListBox();
+			}
+			ImGui::ColorEdit4(CS_XOR("##themes.picker"), &C_GET(ColorPickerVar_t, arrColors[nSelectedColor].second), ImGuiColorEditFlags_NoDragDrop | ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoOptions | ImGuiColorEditFlags_DisplayRGB);
+			ImGui::NewLine();
+			ImGui::PopItemWidth();
+			ImGui::PopStyleVar();
+		}
+		ImGui::EndChild();
+
+		ImGui::SameLine();
+
+		ImGui::BeginChild(CS_XOR("Configs"), child_size);
+		{
+			ImGui::Columns(2, CS_XOR("#CONFIG"), false);
+			{
+				ImGui::PushItemWidth(-1);
+
+				// check selected configuration for magic value
+				if (T::nSelectedConfig == ~1U)
+				{
+					// set default configuration as selected on first use
+					for (std::size_t i = 0U; i < C::vecFileNames.size(); i++)
+					{
+						if (CRT::StringCompare(C::vecFileNames[i], CS_XOR(CS_CONFIGURATION_DEFAULT_FILE_NAME CS_CONFIGURATION_FILE_EXTENSION)) == 0)
+							T::nSelectedConfig = i;
+					}
+				}
+
+				if (ImGui::BeginListBox(CS_XOR("##config.list"), C::vecFileNames.size(), 5))
+				{
+					for (std::size_t i = 0U; i < C::vecFileNames.size(); i++)
+					{
+						// @todo: imgui cant work with wstring
+						const wchar_t* wszFileName = C::vecFileNames[i];
+
+						char szFileName[MAX_PATH] = {};
+						CRT::StringUnicodeToMultiByte(szFileName, CS_ARRAYSIZE(szFileName), wszFileName);
+
+						if (ImGui::Selectable(szFileName, (T::nSelectedConfig == i)))
+							T::nSelectedConfig = i;
+					}
+
+					ImGui::EndListBox();
+				}
+
+				ImGui::PopItemWidth();
+			}
+			ImGui::NextColumn();
+			{
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(ImGui::GetStyle().FramePadding.x, 0));
+				ImGui::PushItemWidth(-1);
+				if (ImGui::InputTextWithHint(CS_XOR("##config.file"), CS_XOR("create new..."), T::szConfigFile, sizeof(T::szConfigFile), ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					// check if the filename isn't empty
+					if (const std::size_t nConfigFileLength = CRT::StringLength(T::szConfigFile); nConfigFileLength > 0U)
+					{
+						CRT::WString_t wszConfigFile(T::szConfigFile);
+
+						if (C::CreateFile(wszConfigFile.Data()))
+							// set created config as selected @todo: dependent on current 'C::CreateFile' behaviour, generally it must be replaced by search
+							T::nSelectedConfig = C::vecFileNames.size() - 1U;
+
+						// clear string
+						CRT::MemorySet(T::szConfigFile, 0U, sizeof(T::szConfigFile));
+					}
+				}
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip(CS_XOR("press enter to create new configuration"));
+
+				if (ImGui::Button(CS_XOR("save"), ImVec2(-1, 15 * MENU::flDpiScale)))
+					C::SaveFile(T::nSelectedConfig);
+
+				if (ImGui::Button(CS_XOR("load"), ImVec2(-1, 15 * MENU::flDpiScale)))
+					C::LoadFile(T::nSelectedConfig);
+
+				if (ImGui::Button(CS_XOR("remove"), ImVec2(-1, 15 * MENU::flDpiScale)))
+					ImGui::OpenPopup(CS_XOR("confirmation##config.remove"));
+
+				if (ImGui::Button(CS_XOR("refresh"), ImVec2(-1, 15 * MENU::flDpiScale)))
+					C::Refresh();
+
+				ImGui::PopItemWidth();
+				ImGui::PopStyleVar();
+			}
+			ImGui::Columns(1);
+
+			if (ImGui::BeginPopupModal(CS_XOR("confirmation##config.remove"), nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove))
+			{
+				CRT::String_t<MAX_PATH> szCurrentConfig(C::vecFileNames[T::nSelectedConfig]);
+
+				ImGui::Text(CS_XOR("are you sure you want to remove \"%s\" configuration?"), szCurrentConfig);
+				ImGui::Spacing();
+
+				if (ImGui::Button(CS_XOR("no"), ImVec2(ImGui::GetContentRegionAvail().x / 2.f, 0)))
+					ImGui::CloseCurrentPopup();
+
+				ImGui::SameLine();
+
+				if (ImGui::Button(CS_XOR("yes"), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+				{
+					C::RemoveFile(T::nSelectedConfig);
+
+					// reset selected configuration index
+					T::nSelectedConfig = ~0U;
+
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
+		}
+		ImGui::EndChild();
+
+		ImGui::EndTabItem();
+	}
+
+	ImGui::EndTabBar();
+	ImGui::End();
+
+	PopStyleVar();
+}
+

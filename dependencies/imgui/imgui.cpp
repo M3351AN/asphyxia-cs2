@@ -1150,62 +1150,62 @@ static void*                GImAllocatorUserData = NULL;
 
 ImGuiStyle::ImGuiStyle()
 {
-    Alpha                   = 1.0f;             // Global alpha applies to everything in Dear ImGui.
-    DisabledAlpha           = 0.60f;            // Additional alpha multiplier applied by BeginDisabled(). Multiply over current value of Alpha.
-    WindowPadding           = ImVec2(8,8);      // Padding within a window
-    WindowRounding          = 0.0f;             // Radius of window corners rounding. Set to 0.0f to have rectangular windows. Large values tend to lead to variety of artifacts and are not recommended.
-    WindowBorderSize        = 1.0f;             // Thickness of border around windows. Generally set to 0.0f or 1.0f. Other values not well tested.
-    WindowMinSize           = ImVec2(32,32);    // Minimum window size
-    WindowTitleAlign        = ImVec2(0.0f,0.5f);// Alignment for title bar text
-    WindowMenuButtonPosition= ImGuiDir_Left;    // Position of the collapsing/docking button in the title bar (left/right). Defaults to ImGuiDir_Left.
-    ChildRounding           = 0.0f;             // Radius of child window corners rounding. Set to 0.0f to have rectangular child windows
-    ChildBorderSize         = 1.0f;             // Thickness of border around child windows. Generally set to 0.0f or 1.0f. Other values not well tested.
-    PopupRounding           = 0.0f;             // Radius of popup window corners rounding. Set to 0.0f to have rectangular child windows
-    PopupBorderSize         = 1.0f;             // Thickness of border around popup or tooltip windows. Generally set to 0.0f or 1.0f. Other values not well tested.
-    FramePadding            = ImVec2(4,3);      // Padding within a framed rectangle (used by most widgets)
-    FrameRounding           = 0.0f;             // Radius of frame corners rounding. Set to 0.0f to have rectangular frames (used by most widgets).
-    FrameBorderSize         = 0.0f;             // Thickness of border around frames. Generally set to 0.0f or 1.0f. Other values not well tested.
-    ItemSpacing             = ImVec2(8,4);      // Horizontal and vertical spacing between widgets/lines
-    ItemInnerSpacing        = ImVec2(4,4);      // Horizontal and vertical spacing between within elements of a composed widget (e.g. a slider and its label)
-    CellPadding             = ImVec2(4,2);      // Padding within a table cell. CellPadding.y may be altered between different rows.
-    TouchExtraPadding       = ImVec2(0,0);      // Expand reactive bounding box for touch-based system where touch position is not accurate enough. Unfortunately we don't sort widgets so priority on overlap will always be given to the first widget. So don't grow this too much!
-    IndentSpacing           = 21.0f;            // Horizontal spacing when e.g. entering a tree node. Generally == (FontSize + FramePadding.x*2).
-    ColumnsMinSpacing       = 6.0f;             // Minimum horizontal spacing between two columns. Preferably > (FramePadding.x + 1).
-    ScrollbarSize           = 14.0f;            // Width of the vertical scrollbar, Height of the horizontal scrollbar
-    ScrollbarRounding       = 9.0f;             // Radius of grab corners rounding for scrollbar
-    GrabMinSize             = 12.0f;            // Minimum width/height of a grab box for slider/scrollbar
-    GrabRounding            = 0.0f;             // Radius of grabs corners rounding. Set to 0.0f to have rectangular slider grabs.
-    LogSliderDeadzone       = 4.0f;             // The size in pixels of the dead-zone around zero on logarithmic sliders that cross zero.
-    TabRounding             = 4.0f;             // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.
-    TabBorderSize           = 0.0f;             // Thickness of border around tabs.
-    TabMinWidthForCloseButton = 0.0f;           // Minimum width for close button to appear on an unselected tab when hovered. Set to 0.0f to always show when hovering, set to FLT_MAX to never show close button unless selected.
-    ColorButtonPosition     = ImGuiDir_Right;   // Side of the color button in the ColorEdit4 widget (left/right). Defaults to ImGuiDir_Right.
-    ButtonTextAlign         = ImVec2(0.5f,0.5f);// Alignment of button text when button is larger than text.
-    SelectableTextAlign     = ImVec2(0.0f,0.0f);// Alignment of selectable text. Defaults to (0.0f, 0.0f) (top-left aligned). It's generally important to keep this left-aligned if you want to lay multiple items on a same line.
-    SeparatorTextBorderSize = 3.0f;             // Thickkness of border in SeparatorText()
-    SeparatorTextAlign      = ImVec2(0.0f,0.5f);// Alignment of text within the separator. Defaults to (0.0f, 0.5f) (left aligned, center).
-    SeparatorTextPadding    = ImVec2(20.0f,3.f);// Horizontal offset of text from each edge of the separator + spacing on other axis. Generally small values. .y is recommended to be == FramePadding.y.
-    DisplayWindowPadding    = ImVec2(19,19);    // Window position are clamped to be visible within the display area or monitors by at least this amount. Only applies to regular windows.
-    DisplaySafeAreaPadding  = ImVec2(3,3);      // If you cannot see the edge of your screen (e.g. on a TV) increase the safe area padding. Covers popups/tooltips as well regular windows.
-    MouseCursorScale        = 1.0f;             // Scale software rendered mouse cursor (when io.MouseDrawCursor is enabled). May be removed later.
-    AntiAliasedLines        = true;             // Enable anti-aliased lines/borders. Disable if you are really tight on CPU/GPU.
-    AntiAliasedLinesUseTex  = true;             // Enable anti-aliased lines/borders using textures where possible. Require backend to render with bilinear filtering (NOT point/nearest filtering).
-    AntiAliasedFill         = true;             // Enable anti-aliased filled shapes (rounded rectangles, circles, etc.).
-    CurveTessellationTol    = 1.25f;            // Tessellation tolerance when using PathBezierCurveTo() without a specific number of segments. Decrease for highly tessellated curves (higher quality, more polygons), increase to reduce quality.
-    CircleTessellationMaxError = 0.30f;         // Maximum error (in pixels) allowed when using AddCircle()/AddCircleFilled() or drawing rounded corner rectangles with no explicit segment count specified. Decrease for higher quality but more geometry.
-    WindowShadowSize        = 100.0f;           // Size (in pixels) of window shadows.
-    WindowShadowOffsetDist  = 0.0f;             // Offset distance (in pixels) of window shadows from casting window.
-    WindowShadowOffsetAngle = IM_PI * 0.25f;    // Offset angle of window shadows from casting window (0.0f = left, 0.5f*PI = bottom, 1.0f*PI = right, 1.5f*PI = top).
+	Alpha = 1.0f; // Global alpha applies to everything in Dear ImGui.
+	DisabledAlpha = 0.60f; // Additional alpha multiplier applied by BeginDisabled(). Multiply over current value of Alpha.
+	WindowPadding = ImVec2(8, 8); // Padding within a window
+	WindowRounding = 0.0f; // Radius of window corners rounding. Set to 0.0f to have rectangular windows. Large values tend to lead to variety of artifacts and are not recommended.
+	WindowBorderSize = 1.0f; // Thickness of border around windows. Generally set to 0.0f or 1.0f. Other values not well tested.
+	WindowMinSize = ImVec2(300, 60); // Minimum window size
+	WindowTitleAlign = ImVec2(0.0f, 0.5f); // Alignment for title bar text
+	WindowMenuButtonPosition = ImGuiDir_Left; // Position of the collapsing/docking button in the title bar (left/right). Defaults to ImGuiDir_Left.
+	ChildRounding = 0.0f; // Radius of child window corners rounding. Set to 0.0f to have rectangular child windows
+	ChildBorderSize = 1.0f; // Thickness of border around child windows. Generally set to 0.0f or 1.0f. Other values not well tested.
+	PopupRounding = 0.0f; // Radius of popup window corners rounding. Set to 0.0f to have rectangular child windows
+	PopupBorderSize = 1.0f; // Thickness of border around popup or tooltip windows. Generally set to 0.0f or 1.0f. Other values not well tested.
+	FramePadding = ImVec2(4, 3); // Padding within a framed rectangle (used by most widgets)
+	FrameRounding = 0.0f; // Radius of frame corners rounding. Set to 0.0f to have rectangular frames (used by most widgets).
+	FrameBorderSize = 0.0f; // Thickness of border around frames. Generally set to 0.0f or 1.0f. Other values not well tested.
+	ItemSpacing = ImVec2(8, 4); // Horizontal and vertical spacing between widgets/lines
+	ItemInnerSpacing = ImVec2(4, 4); // Horizontal and vertical spacing between within elements of a composed widget (e.g. a slider and its label)
+	CellPadding = ImVec2(4, 2); // Padding within a table cell
+	TouchExtraPadding = ImVec2(0, 0); // Expand reactive bounding box for touch-based system where touch position is not accurate enough. Unfortunately we don't sort widgets so priority on overlap will always be given to the first widget. So don't grow this too much!
+	IndentSpacing = 21.0f; // Horizontal spacing when e.g. entering a tree node. Generally == (FontSize + FramePadding.x*2).
+	ColumnsMinSpacing = 6.0f; // Minimum horizontal spacing between two columns. Preferably > (FramePadding.x + 1).
+	ScrollbarSize = 3.0f; // Width of the vertical scrollbar, Height of the horizontal scrollbar
+	ScrollbarRounding = 0.0f; // Radius of grab corners rounding for scrollbar
+	GrabMinSize = 12.0f; // Minimum width/height of a grab box for slider/scrollbar
+	GrabRounding = 0.0f; // Radius of grabs corners rounding. Set to 0.0f to have rectangular slider grabs.
+	LogSliderDeadzone = 4.0f; // The size in pixels of the dead-zone around zero on logarithmic sliders that cross zero.
+	TabRounding = 0.0f; // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.
+	TabBorderSize = 0.0f; // Thickness of border around tabs.
+	TabMinWidthForCloseButton = 0.0f; // Minimum width for close button to appear on an unselected tab when hovered. Set to 0.0f to always show when hovering, set to FLT_MAX to never show close button unless selected.
+	ColorButtonPosition = ImGuiDir_Right; // Side of the color button in the ColorEdit4 widget (left/right). Defaults to ImGuiDir_Right.
+	ButtonTextAlign = ImVec2(0.5f, 0.5f); // Alignment of button text when button is larger than text.
+	SelectableTextAlign = ImVec2(0.0f, 0.0f); // Alignment of selectable text. Defaults to (0.0f, 0.0f) (top-left aligned). It's generally important to keep this left-aligned if you want to lay multiple items on a same line.
+	SeparatorTextBorderSize = 3.0f; // Thickkness of border in SeparatorText()
+	SeparatorTextAlign = ImVec2(0.0f, 0.5f); // Alignment of text within the separator. Defaults to (0.0f, 0.5f) (left aligned, center).
+	SeparatorTextPadding = ImVec2(20.0f, 3.f); // Horizontal offset of text from each edge of the separator + spacing on other axis. Generally small values. .y is recommended to be == FramePadding.y.
+	DisplayWindowPadding = ImVec2(19, 19); // Window position are clamped to be visible within the display area or monitors by at least this amount. Only applies to regular windows.
+	DisplaySafeAreaPadding = ImVec2(3, 3); // If you cannot see the edge of your screen (e.g. on a TV) increase the safe area padding. Covers popups/tooltips as well regular windows.
+	MouseCursorScale = 1.0f; // Scale software rendered mouse cursor (when io.MouseDrawCursor is enabled). May be removed later.
+	AntiAliasedLines = true; // Enable anti-aliased lines/borders. Disable if you are really tight on CPU/GPU.
+	AntiAliasedLinesUseTex = true; // Enable anti-aliased lines/borders using textures where possible. Require backend to render with bilinear filtering (NOT point/nearest filtering).
+	AntiAliasedFill = true; // Enable anti-aliased filled shapes (rounded rectangles, circles, etc.).
+	CurveTessellationTol = 1.25f; // Tessellation tolerance when using PathBezierCurveTo() without a specific number of segments. Decrease for highly tessellated curves (higher quality, more polygons), increase to reduce quality.
+	CircleTessellationMaxError = 0.30f; // Maximum error (in pixels) allowed when using AddCircle()/AddCircleFilled() or drawing rounded corner rectangles with no explicit segment count specified. Decrease for higher quality but more geometry.
+	WindowShadowSize = 100.0f; // Size (in pixels) of window shadows.
+	WindowShadowOffsetDist = 0.0f; // Offset distance (in pixels) of window shadows from casting window.
+	WindowShadowOffsetAngle = IM_PI * 0.25f; // Offset angle of window shadows from casting window (0.0f = left, 0.5f*PI = bottom, 1.0f*PI = right, 1.5f*PI = top).
 
-    // Behaviors
-    HoverStationaryDelay    = 0.15f;            // Delay for IsItemHovered(ImGuiHoveredFlags_Stationary). Time required to consider mouse stationary.
-    HoverDelayShort         = 0.15f;            // Delay for IsItemHovered(ImGuiHoveredFlags_DelayShort). Usually used along with HoverStationaryDelay.
-    HoverDelayNormal        = 0.40f;            // Delay for IsItemHovered(ImGuiHoveredFlags_DelayNormal). "
-    HoverFlagsForTooltipMouse = ImGuiHoveredFlags_Stationary | ImGuiHoveredFlags_DelayShort;    // Default flags when using IsItemHovered(ImGuiHoveredFlags_ForTooltip) or BeginItemTooltip()/SetItemTooltip() while using mouse.
-    HoverFlagsForTooltipNav = ImGuiHoveredFlags_NoSharedDelay | ImGuiHoveredFlags_DelayNormal;  // Default flags when using IsItemHovered(ImGuiHoveredFlags_ForTooltip) or BeginItemTooltip()/SetItemTooltip() while using keyboard/gamepad.
+	// Behaviors
+	HoverStationaryDelay = 0.15f; // Delay for IsItemHovered(ImGuiHoveredFlags_Stationary). Time required to consider mouse stationary.
+	HoverDelayShort = 0.15f; // Delay for IsItemHovered(ImGuiHoveredFlags_DelayShort). Usually used along with HoverStationaryDelay.
+	HoverDelayNormal = 0.40f; // Delay for IsItemHovered(ImGuiHoveredFlags_DelayNormal). "
+	HoverFlagsForTooltipMouse = ImGuiHoveredFlags_Stationary | ImGuiHoveredFlags_DelayShort; // Default flags when using IsItemHovered(ImGuiHoveredFlags_ForTooltip) or BeginItemTooltip()/SetItemTooltip() while using mouse.
+	HoverFlagsForTooltipNav = ImGuiHoveredFlags_NoSharedDelay | ImGuiHoveredFlags_DelayNormal; // Default flags when using IsItemHovered(ImGuiHoveredFlags_ForTooltip) or BeginItemTooltip()/SetItemTooltip() while using keyboard/gamepad.
 
-    // Default theme
-    ImGui::StyleColorsDark(this);
+	// Default theme
+	ImGui::StyleColorsDark(this);
 }
 
 // To scale your entire UI (e.g. if you want your app to use High DPI or generally be DPI aware) you may use this helper function. Scaling the fonts is done separately and is up to you.
@@ -4092,73 +4092,59 @@ bool ImGui::IsItemHovered(ImGuiHoveredFlags flags)
 // If you used this in your legacy/custom widgets code:
 // - Commonly: if your ItemHoverable() call comes after an ItemAdd() call: pass 'item_flags = g.LastItemData.InFlags'.
 // - Rare: otherwise you may pass 'item_flags = 0' (ImGuiItemFlags_None) unless you want to benefit from special behavior handled by ItemHoverable.
-bool ImGui::ItemHoverable(const ImRect& bb, ImGuiID id, ImGuiItemFlags item_flags)
+bool ImGui::ItemHoverable(const ImRect& bb, ImGuiID id)
 {
-    ImGuiContext& g = *GImGui;
-    ImGuiWindow* window = g.CurrentWindow;
-    if (g.HoveredWindow != window)
-        return false;
-    if (!IsMouseHoveringRect(bb.Min, bb.Max))
-        return false;
+	ImGuiContext& g = *GImGui;
+	if (g.HoveredId != 0 && g.HoveredId != id && !g.HoveredIdAllowOverlap)
+		return false;
 
-    if (g.HoveredId != 0 && g.HoveredId != id && !g.HoveredIdAllowOverlap)
-        return false;
-    if (g.ActiveId != 0 && g.ActiveId != id && !g.ActiveIdAllowOverlap)
-        return false;
+	ImGuiWindow* window = g.CurrentWindow;
+	if (g.HoveredWindow != window)
+		return false;
+	if (g.ActiveId != 0 && g.ActiveId != id && !g.ActiveIdAllowOverlap)
+		return false;
+	if (!IsMouseHoveringRect(bb.Min, bb.Max))
+		return false;
 
-    // Done with rectangle culling so we can perform heavier checks now.
-    if (!(item_flags & ImGuiItemFlags_NoWindowHoverableCheck) && !IsWindowContentHoverable(window, ImGuiHoveredFlags_None))
-    {
-        g.HoveredIdDisabled = true;
-        return false;
-    }
+	// Done with rectangle culling so we can perform heavier checks now.
+	ImGuiItemFlags item_flags = (g.LastItemData.ID == id ? g.LastItemData.InFlags : g.CurrentItemFlags);
+	if (!(item_flags & ImGuiItemFlags_NoWindowHoverableCheck) && !IsWindowContentHoverable(window, ImGuiHoveredFlags_None))
+	{
+		g.HoveredIdDisabled = true;
+		return false;
+	}
 
-    // We exceptionally allow this function to be called with id==0 to allow using it for easy high-level
-    // hover test in widgets code. We could also decide to split this function is two.
-    if (id != 0)
-    {
-        // Drag source doesn't report as hovered
-        if (g.DragDropActive && g.DragDropPayload.SourceId == id && !(g.DragDropSourceFlags & ImGuiDragDropFlags_SourceNoDisableHover))
-            return false;
+	// We exceptionally allow this function to be called with id==0 to allow using it for easy high-level
+	// hover test in widgets code. We could also decide to split this function is two.
+	if (id != 0)
+		SetHoveredID(id);
 
-        SetHoveredID(id);
+	// When disabled we'll return false but still set HoveredId
+	if (item_flags & ImGuiItemFlags_Disabled)
+	{
+		// Release active id if turning disabled
+		if (g.ActiveId == id)
+			ClearActiveID();
+		g.HoveredIdDisabled = true;
+		return false;
+	}
 
-        // AllowOverlap mode (rarely used) requires previous frame HoveredId to be null or to match.
-        // This allows using patterns where a later submitted widget overlaps a previous one. Generally perceived as a front-to-back hit-test.
-        if (item_flags & ImGuiItemFlags_AllowOverlap)
-        {
-            g.HoveredIdAllowOverlap = true;
-            if (g.HoveredIdPreviousFrame != id)
-                return false;
-        }
-    }
+	if (id != 0)
+	{
+		// [DEBUG] Item Picker tool!
+		// We perform the check here because SetHoveredID() is not frequently called (1~ time a frame), making
+		// the cost of this tool near-zero. We can get slightly better call-stack and support picking non-hovered
+		// items if we performed the test in ItemAdd(), but that would incur a small runtime cost.
+		if (g.DebugItemPickerActive && g.HoveredIdPreviousFrame == id)
+			GetForegroundDrawList()->AddRect(bb.Min, bb.Max, IM_COL32(255, 255, 0, 255));
+		if (g.DebugItemPickerBreakId == id)
+			IM_DEBUG_BREAK();
+	}
 
-    // When disabled we'll return false but still set HoveredId
-    if (item_flags & ImGuiItemFlags_Disabled)
-    {
-        // Release active id if turning disabled
-        if (g.ActiveId == id && id != 0)
-            ClearActiveID();
-        g.HoveredIdDisabled = true;
-        return false;
-    }
+	if (g.NavDisableMouseHover)
+		return false;
 
-    if (id != 0)
-    {
-        // [DEBUG] Item Picker tool!
-        // We perform the check here because SetHoveredID() is not frequently called (1~ time a frame), making
-        // the cost of this tool near-zero. We can get slightly better call-stack and support picking non-hovered
-        // items if we performed the test in ItemAdd(), but that would incur a small runtime cost.
-        if (g.DebugItemPickerActive && g.HoveredIdPreviousFrame == id)
-            GetForegroundDrawList()->AddRect(bb.Min, bb.Max, IM_COL32(255, 255, 0, 255));
-        if (g.DebugItemPickerBreakId == id)
-            IM_DEBUG_BREAK();
-    }
-
-    if (g.NavDisableMouseHover)
-        return false;
-
-    return true;
+	return true;
 }
 
 // FIXME: This is inlined/duplicated in ItemAdd()
@@ -5314,6 +5300,18 @@ bool ImGui::IsItemEdited()
     return (g.LastItemData.StatusFlags & ImGuiItemStatusFlags_Edited) != 0;
 }
 
+// Allow last item to be overlapped by a subsequent item. Both may be activated during the same frame before the later one takes priority.
+// FIXME: Although this is exposed, its interaction and ideal idiom with using ImGuiButtonFlags_AllowItemOverlap flag are extremely confusing, need rework.
+void ImGui::SetItemAllowOverlap()
+{
+	ImGuiContext& g = *GImGui;
+	ImGuiID id = g.LastItemData.ID;
+	if (g.HoveredId == id)
+		g.HoveredIdAllowOverlap = true;
+	if (g.ActiveId == id)
+		g.ActiveIdAllowOverlap = true;
+}
+
 // Allow next item to be overlapped by subsequent items.
 // This works by requiring HoveredId to match for two subsequent frames,
 // so if a following items overwrite it our interactions will naturally be disabled.
@@ -5373,57 +5371,78 @@ ImVec2 ImGui::GetItemRectSize()
 
 bool ImGui::BeginChildEx(const char* name, ImGuiID id, const ImVec2& size_arg, bool border, ImGuiWindowFlags flags)
 {
-    ImGuiContext& g = *GImGui;
-    ImGuiWindow* parent_window = g.CurrentWindow;
+	ImGuiContext& g = *GImGui;
+	ImGuiWindow* parent_window = g.CurrentWindow;
 
-    flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_ChildWindow;
-    flags |= (parent_window->Flags & ImGuiWindowFlags_NoMove);  // Inherit the NoMove flag
+	flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_ChildWindow | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar;
+	flags |= (parent_window->Flags & ImGuiWindowFlags_NoMove); // Inherit the NoMove flag
 
-    // Size
-    const ImVec2 content_avail = GetContentRegionAvail();
-    ImVec2 size = ImFloor(size_arg);
-    const int auto_fit_axises = ((size.x == 0.0f) ? (1 << ImGuiAxis_X) : 0x00) | ((size.y == 0.0f) ? (1 << ImGuiAxis_Y) : 0x00);
-    if (size.x <= 0.0f)
-        size.x = ImMax(content_avail.x + size.x, 4.0f); // Arbitrary minimum child size (0.0f causing too many issues)
-    if (size.y <= 0.0f)
-        size.y = ImMax(content_avail.y + size.y, 4.0f);
-    SetNextWindowSize(size);
+	// Size
+	const ImVec2 content_avail = GetContentRegionAvail();
+	ImVec2 size = ImFloor(size_arg);
+	const int auto_fit_axises = ((size.x == 0.0f) ? (1 << ImGuiAxis_X) : 0x00) | ((size.y == 0.0f) ? (1 << ImGuiAxis_Y) : 0x00);
+	if (size.x <= 0.0f)
+		size.x = ImMax(content_avail.x + size.x, 4.0f); // Arbitrary minimum child size (0.0f causing too many issues)
+	if (size.y <= 0.0f)
+		size.y = ImMax(content_avail.y + size.y, 4.0f);
+	SetNextWindowSize(size);
 
-    // Build up name. If you need to append to a same child from multiple location in the ID stack, use BeginChild(ImGuiID id) with a stable value.
-    const char* temp_window_name;
-    if (name)
-        ImFormatStringToTempBuffer(&temp_window_name, NULL, "%s/%s_%08X", parent_window->Name, name, id);
-    else
-        ImFormatStringToTempBuffer(&temp_window_name, NULL, "%s/%08X", parent_window->Name, id);
+	// Build up name. If you need to append to a same child from multiple location in the ID stack, use BeginChild(ImGuiID id) with a stable value.
+	const char* temp_window_name;
+	if (name)
+		ImFormatStringToTempBuffer(&temp_window_name, NULL, "%s/%s_%08X", parent_window->Name, name, id);
+	else
+		ImFormatStringToTempBuffer(&temp_window_name, NULL, "%s/%08X", parent_window->Name, id);
 
-    const float backup_border_size = g.Style.ChildBorderSize;
-    if (!border)
-        g.Style.ChildBorderSize = 0.0f;
-    bool ret = Begin(temp_window_name, NULL, flags);
-    g.Style.ChildBorderSize = backup_border_size;
+	const float backup_border_size = g.Style.ChildBorderSize;
+	if (!border)
+		g.Style.ChildBorderSize = 0.0f;
+	bool ret = Begin(temp_window_name, NULL, flags);
+	g.Style.ChildBorderSize = backup_border_size;
 
-    ImGuiWindow* child_window = g.CurrentWindow;
-    child_window->ChildId = id;
-    child_window->AutoFitChildAxises = (ImS8)auto_fit_axises;
+	ImGuiWindow* child_window = g.CurrentWindow;
+	child_window->ChildId = id;
+	child_window->AutoFitChildAxises = (ImS8)auto_fit_axises;
 
-    // Set the cursor to handle case where the user called SetNextWindowPos()+BeginChild() manually.
-    // While this is not really documented/defined, it seems that the expected thing to do.
-    if (child_window->BeginCount == 1)
-        parent_window->DC.CursorPos = child_window->Pos;
+	// Set the cursor to handle case where the user called SetNextWindowPos()+BeginChild() manually.
+	// While this is not really documented/defined, it seems that the expected thing to do.
+	if (child_window->BeginCount == 1)
+		parent_window->DC.CursorPos = child_window->Pos;
 
-    // Process navigation-in immediately so NavInit can run on first frame
-    // Can enter a child if (A) it has navigatable items or (B) it can be scrolled.
-    const ImGuiID temp_id_for_activation = ImHashStr("##Child", 0, id);
-    if (g.ActiveId == temp_id_for_activation)
-        ClearActiveID();
-    if (g.NavActivateId == id && !(flags & ImGuiWindowFlags_NavFlattened) && (child_window->DC.NavLayersActiveMask != 0 || child_window->DC.NavWindowHasScrollY))
-    {
-        FocusWindow(child_window);
-        NavInitWindow(child_window, false);
-        SetActiveID(temp_id_for_activation, child_window); // Steal ActiveId with another arbitrary id so that key-press won't activate child item
-        g.ActiveIdSource = g.NavInputSource;
-    }
-    return ret;
+	// Process navigation-in immediately so NavInit can run on first frame
+	// Can enter a child if (A) it has navigatable items or (B) it can be scrolled.
+	const ImGuiID temp_id_for_activation = (id + 1);
+	if (g.ActiveId == temp_id_for_activation)
+		ClearActiveID();
+	if (g.NavActivateId == id && !(flags & ImGuiWindowFlags_NavFlattened) && (child_window->DC.NavLayersActiveMask != 0 || child_window->DC.NavWindowHasScrollY))
+	{
+		FocusWindow(child_window);
+		NavInitWindow(child_window, false);
+		SetActiveID(temp_id_for_activation, child_window); // Steal ActiveId with another arbitrary id so that key-press won't activate child item
+		g.ActiveIdSource = g.NavInputSource;
+	}
+
+	float space_sz = 5.f;
+	ImVec2 label_size = CalcTextSize(name);
+
+	if (name)
+	{
+		PushStyleVar(ImGuiStyleVar_Alpha, 1.f);
+		RenderFrame(parent_window->DC.CursorPos + ImVec2(0.f, space_sz), parent_window->DC.CursorPos + size, GetColorU32(ImGuiCol_ChildBg), false, 0.f);
+		PopStyleVar();
+
+		RenderText(parent_window->DC.CursorPos + ImVec2(20.f, space_sz - (label_size.y / 2)), name);
+		SetCursorPosY(GetCursorPosY() + space_sz + (label_size.y / 2) + g.Style.ItemSpacing.y + g.Style.FramePadding.y * 2);
+		Indent(10.f);
+	}
+	else
+	{
+		PushStyleVar(ImGuiStyleVar_Alpha, 1.f);
+		RenderFrame(parent_window->DC.CursorPos, parent_window->DC.CursorPos + size, GetColorU32(ImGuiCol_ChildBg), false, 0.f);
+		PopStyleVar();
+	}
+
+	return ret;
 }
 
 bool ImGui::BeginChild(const char* str_id, const ImVec2& size_arg, bool border, ImGuiWindowFlags extra_flags)
@@ -9174,8 +9193,10 @@ bool ImGui::DebugCheckVersionAndDataLayout(const char* version, size_t sz_io, si
 //    BeginGroup() + SomeItem("foobar") + SetCursorScreenPos(GetCursorScreenPos()) + EndGroup()
 //  The previous logic made SetCursorScreenPos(GetCursorScreenPos()) have a side-effect! It would erroneously incorporate ItemSpacing.y after the item into content size, making the group taller!
 //  While this code is a little twisted, no-one would expect SetXXX(GetXXX()) to have a side-effect. Using vertical alignment patterns could trigger this issue.
+
 void ImGui::ErrorCheckUsingSetCursorPosToExtendParentBoundaries()
 {
+	/*
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;
     IM_ASSERT(window->DC.IsSetPos);
@@ -9188,7 +9209,7 @@ void ImGui::ErrorCheckUsingSetCursorPosToExtendParentBoundaries()
     IM_ASSERT(0 && "Code uses SetCursorPos()/SetCursorScreenPos() to extend window/parent boundaries. Please submit an item e.g. Dummy() to validate extent.");
 #else
     window->DC.CursorMaxPos = ImMax(window->DC.CursorMaxPos, window->DC.CursorPos);
-#endif
+#endif*/
 }
 
 static void ImGui::ErrorCheckNewFrameSanityChecks()
@@ -12405,7 +12426,7 @@ bool ImGui::BeginDragDropSource(ImGuiDragDropFlags flags)
             // Rely on keeping other window->LastItemXXX fields intact.
             source_id = g.LastItemData.ID = window->GetIDFromRectangle(g.LastItemData.Rect);
             KeepAliveID(source_id);
-            bool is_hovered = ItemHoverable(g.LastItemData.Rect, source_id, g.LastItemData.InFlags);
+            bool is_hovered = ItemHoverable(g.LastItemData.Rect, source_id);
             if (is_hovered && g.IO.MouseClicked[mouse_button])
             {
                 SetActiveID(source_id, window);

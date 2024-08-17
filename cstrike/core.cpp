@@ -36,13 +36,9 @@
 
 bool CORE::GetWorkingPath(wchar_t* wszDestination)
 {
-	const wchar_t* wszModuleName = MEM::GetModuleBaseFileName(static_cast<HMODULE>(hDll), true);
-	CRT::StringCopy(wszDestination, wszModuleName);
-
-	// remove the module name
-	if (wchar_t* pwszLastSlash = CRT::StringCharR(wszDestination, L'\\'); pwszLastSlash != nullptr)
-		*pwszLastSlash = L'\0';
-
+	wchar_t wszAPPDATA[MAX_PATH];
+	SHGetSpecialFolderPath(0, wszAPPDATA, CSIDL_LOCAL_APPDATA, false);
+	CRT::StringCopy(wszDestination, wszAPPDATA);
 	CRT::StringCat(wszDestination, L"\\.asphyxia\\");
 	// create directory if it doesn't exist
 	if (!::CreateDirectoryW(wszDestination, nullptr))
