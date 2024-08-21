@@ -424,7 +424,7 @@ class C_CSWeaponBase : public C_BasePlayerWeapon
 {
 public:
 	CS_CLASS_NO_INITIALIZER(C_CSWeaponBase);
-	SCHEMA_ADD_OFFSET(CCSWeaponBaseVData*, dataWeapon, 0x368);
+	SCHEMA_ADD_FIELD_OFFSET(CCSWeaponBaseVData*, dataWeapon, "C_BaseEntity->m_nSubclassID",0x8);
 	SCHEMA_ADD_FIELD(bool, IsInReload, "C_CSWeaponBase->m_bInReload");
 
 	CCSWeaponBaseVData* GetWeaponVData()
