@@ -950,7 +950,7 @@ void menu::render()
 
 			if (const auto& nameOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayName); nameOverlayConfig.bEnable)
 				context.AddComponent(new CTextComponent(true, SIDE_TOP, DIR_TOP, FONT::pVisual, CS_XOR("\u6642\u96e8\u005b\u3057\u3050\u308c\u005d\u0421\u0445\u0438\u0433\u0443\u0440\u0435"), Vars.overlayName));
-
+			
 			if (const auto& healthOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayHealthBar); healthOverlayConfig.bEnable)
 			{
 				const float flFactor = M_SIN(ImGui::GetTime() * 5.f) * 0.55f + 0.45f;
@@ -1046,7 +1046,10 @@ void menu::render()
 
 		BeginChild(CS_XOR("Info"), child_size);
 		{
-			LabelText(CS_XOR("last update:"), __DATE__, __TIME__);
+			LabelText(CS_XOR("last build:"), __DATE__, __TIME__);
+			LabelText(CS_XOR("build for game version:"), CS_PRODUCTSTRINGVERSION);
+			LabelText(CS_XOR("current game version:"), I::Engine->GetProductVersionString());
+			
 		}
 		EndChild();
 

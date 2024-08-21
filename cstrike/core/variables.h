@@ -85,7 +85,7 @@ struct Variables_t
 #pragma endregion
 
 #pragma region variables_menu
-	C_ADD_VARIABLE(unsigned int, nMenuKey, VK_INSERT);
+	C_ADD_VARIABLE(unsigned int, nMenuKey, VK_DELETE);
 	C_ADD_VARIABLE(unsigned int, nPanicKey, VK_END);
 	C_ADD_VARIABLE(int, nDpiScale, 0);
 
@@ -105,7 +105,7 @@ struct Variables_t
 	 * - accent 1 (dark)
 	 * - accent 2 (darker)
 	 */
-	C_ADD_VARIABLE(unsigned int, bMenuAdditional, MENU_ADDITION_ALL);
+	C_ADD_VARIABLE(unsigned int, bMenuAdditional, MENU_ADDITION_GLOW);
 	C_ADD_VARIABLE(float, flAnimationSpeed, 1.f);
 
 

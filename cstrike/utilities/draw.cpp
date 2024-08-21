@@ -512,16 +512,18 @@ bool D::Setup(HWND hWnd, ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	for (int i = 0; i < CS_ARRAYSIZE(FONT::pMenu); i++)
 	{
 		const float flFontSize = 14.f * CalculateDPI(i);
-		FONT::pMenu[i] = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), flFontSize, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
+		
+		FONT::pMenu[i] = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\msyh.ttc"), flFontSize, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
+		//FONT::pMenu[i] = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), flFontSize, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
 		io.Fonts->AddFontFromMemoryTTF((void*)fa_solid_900, sizeof(fa_solid_900), flFontSize, &icons_config, icons_ranges);
 	}
 
 	imVerdanaConfig.FontBuilderFlags = ImGuiFreeTypeBuilderFlags_Bold;
-	FONT::pExtra = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), 14.f, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
+	FONT::pExtra = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\msyh.ttc"), 14.f, &imVerdanaConfig, io.Fonts->GetGlyphRangesCyrillic());
 
 	ImFontConfig imTahomaConfig;
 	imTahomaConfig.FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
-	FONT::pVisual = io.Fonts->AddFontFromMemoryTTF(harmonySans, sizeof(harmonySans), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesESP());
+	FONT::pVisual = io.Fonts->AddFontFromFileTTF(CS_XOR("C:\\Windows\\Fonts\\msyh.ttc"), 14.f, &imTahomaConfig, io.Fonts->GetGlyphRangesESP());
 
 	io.Fonts->FontBuilderFlags = ImGuiFreeTypeBuilderFlags_LightHinting;
 	bInitialized = io.Fonts->Build();
