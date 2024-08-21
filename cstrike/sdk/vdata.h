@@ -29,6 +29,16 @@ public:
 	//float32 m_flCrouchTime = 0x174
 };
 
+class EntSubClassVDataBase
+{
+public:
+	template <typename T> requires std::derived_from<T, EntSubClassVDataBase>
+	inline T* as()
+	{
+		return (T*)this;
+	}
+};
+
 class CBasePlayerWeaponVData
 {
 public:
@@ -42,7 +52,7 @@ class CCSWeaponBaseVData : public CBasePlayerWeaponVData
 {
 public:
 	CS_CLASS_NO_INITIALIZER(CCSWeaponBaseVData);
-
+	SCHEMA_ADD_FIELD(const char*, GetszName, "CCSWeaponBaseVData->m_szName");
 	SCHEMA_ADD_FIELD(std::int32_t, GetWeaponType, "CCSWeaponBaseVData->m_WeaponType");
 	SCHEMA_ADD_FIELD(float, GetRange, "CCSWeaponBaseVData->m_flRange");
 };

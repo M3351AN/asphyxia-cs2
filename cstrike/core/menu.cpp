@@ -883,8 +883,10 @@ void menu::render()
 			{
 				ImGui::Checkbox(CS_XOR("bounding box"), &C_GET(FrameOverlayVar_t, Vars.overlayBox).bEnable);
 				ImGui::Checkbox(CS_XOR("name"), &C_GET(TextOverlayVar_t, Vars.overlayName).bEnable);
+				ImGui::Checkbox(CS_XOR("weapon name"), &C_GET(TextOverlayVar_t, Vars.overlayWeapon).bEnable);
 				ImGui::Checkbox(CS_XOR("health bar"), &C_GET(BarOverlayVar_t, Vars.overlayHealthBar).bEnable);
 				ImGui::Checkbox(CS_XOR("armor bar"), &C_GET(BarOverlayVar_t, Vars.overlayArmorBar).bEnable);
+				ImGui::Checkbox(CS_XOR("ammo bar"), &C_GET(BarOverlayVar_t, Vars.overlayAmmoBar).bEnable);
 			}
 			ImGui::EndDisabled();
 			ImGui::NewLine();
@@ -957,10 +959,17 @@ void menu::render()
 				context.AddComponent(new CBarComponent(true, SIDE_LEFT, vecBox, flFactor, Vars.overlayHealthBar));
 			}
 
+			if (const auto& ammoOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayAmmoBar); ammoOverlayConfig.bEnable)
+			{
+				const float flAmmoFactor = M_SIN(ImGui::GetTime() * 5.f) * 0.55f + 0.45f;
+				context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, flAmmoFactor, Vars.overlayAmmoBar));
+			}
+			if (const auto& weaponOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayWeapon); weaponOverlayConfig.bEnable)
+				context.AddComponent(new CTextComponent(false, SIDE_BOTTOM, DIR_TOP, FONT::pVisual, CS_XOR("\u0031\u0032\u002e\u0037\u0063\u006d\u8fde\u88c5\u70ae\u0043\u578b\u6539\u4e8c\u2605\u002b\u0037"), Vars.overlayWeapon));
 			if (const auto& armorOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayArmorBar); armorOverlayConfig.bEnable)
 			{
 				const float flArmorFactor = M_SIN(ImGui::GetTime() * 5.f) * 0.55f + 0.45f;
-				context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, flArmorFactor, Vars.overlayArmorBar));
+				context.AddComponent(new CBarComponent(false, SIDE_RIGHT, vecBox, flArmorFactor, Vars.overlayArmorBar));
 			}
 
 			// only render context preview if overlay is enabled

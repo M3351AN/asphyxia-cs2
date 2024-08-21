@@ -3989,6 +3989,7 @@ const ImWchar* ImFontAtlas::GetGlyphRangesESP()
 		0x0020,0x00FF, // Basic Latin + Latin Supplement
 		0x0400,0x052F, // Cyrillic + Cyrillic Supplement
 		0x2000,0x206F, // General Punctuation
+		0x2600,0x260F,
 		0x3000,0x30FF, // CJK Symbols and Punctuations, Hiragana, Katakana
 		//0x31F0,0x31FF, // Katakana Phonetic Extensions(NOT NECESSARY?)
 		0xFF00,0xFFEF, // Half-width characters

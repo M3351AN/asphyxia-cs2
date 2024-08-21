@@ -619,9 +619,61 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 	if (const auto& armorOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayArmorBar); armorOverlayConfig.bEnable)
 	{
 		const float flArmorFactor = pPlayerPawn->GetArmorValue() / 100.f;
-		context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, flArmorFactor, Vars.overlayArmorBar));
+		context.AddComponent(new CBarComponent(false, SIDE_RIGHT, vecBox, flArmorFactor, Vars.overlayArmorBar));
 	}
 
+	CPlayer_WeaponServices* WeaponServices = pPlayerPawn->GetWeaponServices();
+	if (WeaponServices)
+	{
+		auto ActiveWeapon = I::GameResourceService->pGameEntitySystem->Get<C_CSWeaponBase>(WeaponServices->GetActiveWeapon());
+		if (ActiveWeapon)
+		{
+			auto pAttributeContainer = ActiveWeapon->GetAttributeManager();
+			if (!pAttributeContainer)
+				return;
+
+			auto data = ActiveWeapon->dataWeapon();
+			if (!data)
+				return;
+
+			auto szWeaponName = data->GetszName();
+
+			if (szWeaponName == CS_XOR("NULL"))
+				return;
+
+			const char* weaponPrefix = CS_XOR("weapon_");
+			const char* weaponNameStart = strstr(szWeaponName, weaponPrefix);
+			const char* extractedWeaponName;
+
+			if (!weaponNameStart)
+				extractedWeaponName = szWeaponName;
+
+			weaponNameStart += strlen(weaponPrefix);
+			extractedWeaponName = weaponNameStart;
+
+			if (const auto& weaponOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayWeapon); weaponOverlayConfig.bEnable)
+			{
+				context.AddComponent(new CTextComponent(false, SIDE_BOTTOM, DIR_TOP, FONT::pVisual, extractedWeaponName, Vars.overlayWeapon));
+			}
+
+			if (const auto& ammoOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayAmmoBar); ammoOverlayConfig.bEnable)
+			{
+				auto VData = ActiveWeapon->GetVData();
+				if (VData)
+				{
+					const auto ammo = ActiveWeapon->GetClip1();
+					const auto max_ammo = VData->GetMaxClip1();
+
+					if (max_ammo > 0)
+					{
+						const float factor = static_cast<float>(ammo) / max_ammo;
+						// here we use the SIDE_BOTTOM which overrided max_ammo as the var used for factor limitation
+						context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, ammo, Vars.overlayAmmoBar));
+					}
+				}
+			}
+		}
+	}
 	// render all the context
 	context.Render(D::pDrawListActive, vecBox);
 }

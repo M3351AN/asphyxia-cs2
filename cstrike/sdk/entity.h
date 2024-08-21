@@ -153,6 +153,7 @@ public:
 	}
 };
 
+
 class C_BaseEntity : public CEntityInstance
 {
 public:
@@ -202,7 +203,7 @@ public:
 	SCHEMA_ADD_FIELD(std::int32_t, GetHealth, "C_BaseEntity->m_iHealth");
 	SCHEMA_ADD_FIELD(std::int32_t, GetMaxHealth, "C_BaseEntity->m_iMaxHealth");
 	SCHEMA_ADD_FIELD(float, GetWaterLevel, "C_BaseEntity->m_flWaterLevel");
-	SCHEMA_ADD_FIELD_OFFSET(void*, GetVData, "C_BaseEntity->m_nSubclassID", 0x8);
+	SCHEMA_ADD_FIELD_OFFSET(EntSubClassVDataBase*, GetVDataBase, "C_BaseEntity->m_nSubclassID", 0x8);
 };
 
 class CGlowProperty;
@@ -225,10 +226,15 @@ public:
 class CPlayer_ItemServices;
 class CPlayer_CameraServices;
 
-class CPlayer_WeaponServices
+class CPlayer_WeaponServices : public C_BaseModelEntity
 {
 public:
+	CS_CLASS_NO_INITIALIZER(CPlayer_WeaponServices);
+
+	//SCHEMA_ADD_OFFSET(GameTime_t, m_flNextAttack, 0xB8);
+	SCHEMA_ADD_FIELD(GameTime_t, GetNextAttack, "CCSPlayer_WeaponServices->m_flNextAttack");
 	SCHEMA_ADD_FIELD(CBaseHandle, GetActiveWeapon, "CPlayer_WeaponServices->m_hActiveWeapon");
+	SCHEMA_ADD_FIELD(uint16_t[32], GetAmmo, "CPlayer_WeaponServices->m_iAmmo");
 };
 
 class CCSPlayer_WeaponServices : public CPlayer_WeaponServices
@@ -406,13 +412,19 @@ public:
 	SCHEMA_ADD_FIELD(std::int32_t, GetClip1, "C_BasePlayerWeapon->m_iClip1");
 	SCHEMA_ADD_FIELD(std::int32_t, GetClip2, "C_BasePlayerWeapon->m_iClip2");
 	SCHEMA_ADD_FIELD(std::int32_t[2], GetReserveAmmo, "C_BasePlayerWeapon->m_pReserveAmmo");
+
+	CBasePlayerWeaponVData* GetVData() noexcept
+	{
+		return (CBasePlayerWeaponVData*)GetVDataBase();
+	}
 };
+
 
 class C_CSWeaponBase : public C_BasePlayerWeapon
 {
 public:
 	CS_CLASS_NO_INITIALIZER(C_CSWeaponBase);
-
+	SCHEMA_ADD_OFFSET(CCSWeaponBaseVData*, dataWeapon, 0x368);
 	SCHEMA_ADD_FIELD(bool, IsInReload, "C_CSWeaponBase->m_bInReload");
 
 	CCSWeaponBaseVData* GetWeaponVData()
