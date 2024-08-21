@@ -223,9 +223,9 @@ void MENU::RenderWatermark()
 
 	ImGuiStyle& style = ImGui::GetStyle();
 
-	ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.f, 0.f, 0.f, 0.03f));
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.f, 0.f, 0.f, 0.03f));
-	ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.f, 0.f, 0.f, 0.03f));
+	ImGui::PushStyleColor(ImGuiCol_MenuBarBg, ImVec4(0.f, 0.f, 0.f, 0.f));
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.f, 0.f, 0.f, 0.f));
+	ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.f, 0.f, 0.f, 0.f));
 	ImGui::PushFont(FONT::pExtra);
 	ImGui::BeginMainMenuBar();
 	{
@@ -932,8 +932,8 @@ void menu::render()
 
 			ImDrawList* pDrawList = ImGui::GetWindowDrawList();
 			Context_t context;
-			ImGui::SetCursorPos(ImVec2{ 20, 40 });
-			ImGui::Image((void*)I::Shigure, ImVec2{ 160, 220 });
+			ImGui::SetCursorPos(ImVec2{ 20, 40 } * MENU::flDpiScale);
+			ImGui::Image((void*)I::Shigure, ImVec2{ 160, 220 } * MENU::flDpiScale);
 			ImVec4 vecBox = {
 				vecWindowPos.x + vecOverlayPadding.x,
 				vecWindowPos.y + vecOverlayPadding.y,
