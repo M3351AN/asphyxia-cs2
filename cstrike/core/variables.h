@@ -65,6 +65,8 @@ struct Variables_t
 	C_ADD_VARIABLE(bool, bThirdperson, false);
 	C_ADD_VARIABLE(float, flThirdpersonDistance, 100.f);
 	C_ADD_VARIABLE(bool, bThirdpersonNoInterp, true);
+	C_ADD_VARIABLE(bool, bThirdpersonCollision, false);
+
 #pragma endregion
 
 #pragma region variables_misc

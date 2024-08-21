@@ -293,7 +293,7 @@ void CS_FASTCALL H::OverrideView(void* pClientModeCSNormal, CViewSetup* pSetup)
 		progress = MATH::clamp(progress + I::GlobalVars->flFrameTime * 6.f, 40.f / C_GET(float, Vars.flThirdpersonDistance), 1.f);
 
 		CONVAR::cam_idealdist->value.fl = C_GET(float, Vars.flThirdpersonDistance) * (C_GET(bool, Vars.bThirdpersonNoInterp) ? 1.f : bezier(progress));
-		CONVAR::cam_collision->value.i1 = true;
+		CONVAR::cam_collision->value.i1 = C_GET(bool, Vars.bThirdpersonCollision);
 		CONVAR::cam_snapto->value.i1 = true;
 		CONVAR::c_thirdpersonshoulder->value.i1 = true;
 		CONVAR::c_thirdpersonshoulderaimdist->value.fl = 0.f;

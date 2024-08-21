@@ -910,6 +910,10 @@ void menu::render()
 			if (C_GET(bool, Vars.bThirdperson))
 			{
 				SliderFloat(CS_XOR("distance"), &C_GET(float, Vars.flThirdpersonDistance), 0.f, 150.f, CS_XOR("%.1f%"), ImGuiSliderFlags_NoInput);
+				
+				Checkbox(CS_XOR("collision"), &C_GET(bool, Vars.bThirdpersonCollision));
+				Checkbox(CS_XOR("no interp"), &C_GET(bool, Vars.bThirdpersonNoInterp));
+				
 			}
 
 			ImGui::PopStyleVar();

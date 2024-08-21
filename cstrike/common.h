@@ -5,14 +5,14 @@
  * - used for automatic adaptation mechanism of configuration files from previous versions
  */
 
-#define CS_VERSION 1000
+#define CS_VERSION 1001
 
 /*
  * current build of CS2
  * - used to verify game version
  */
 
-#define CS_PRODUCTSTRINGVERSION CS_XOR("1.40.2.6")
+#define CS_PRODUCTSTRINGVERSION CS_XOR("1.40.2.7")
 
 /*
  * game's modules

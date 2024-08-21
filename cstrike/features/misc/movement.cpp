@@ -151,7 +151,7 @@ void F::MISC::MOVEMENT::AutoStrafe(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_C
 		pUserCmd->flForwardMove = MATH::clamp(new_forward, -1.f, 1.f);
 		pUserCmd->flSideMove = MATH::clamp(new_side * -1.f, -1.f, 1.f);
 
-		if (pUserCmd->flForwardMove > 0.f)
+		if (pUserCmd->flForwardMove >= 0.f)
 			cmd.nButtons.nValue |= IN_FORWARD;
 		else if (pUserCmd->flForwardMove < 0.f)
 			cmd.nButtons.nValue |= IN_BACK;
@@ -181,8 +181,8 @@ void F::MISC::MOVEMENT::AutoStrafe(CUserCmd* pCmd, CBaseUserCmdPB* pUserCmd, C_C
 
 		rotate_movement(cmd, MATH::normalize_yaw(yaw));
 
-		if (!viewanglestrafe && offset == 0.f)
-			return;
+		//if (!viewanglestrafe && offset == 0.f)
+			//return;
 	}
 
 	if (pUserCmd->flSideMove != 0.0f || pUserCmd->flForwardMove != 0.0f)
