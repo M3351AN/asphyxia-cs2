@@ -1046,10 +1046,18 @@ void menu::render()
 
 		BeginChild(CS_XOR("Info"), child_size);
 		{
-			LabelText(CS_XOR("last build:"), __DATE__, __TIME__);
+			LabelText(CS_XOR("last build:"), __DATE__);
 			LabelText(CS_XOR("build for game version:"), CS_PRODUCTSTRINGVERSION);
 			LabelText(CS_XOR("current game version:"), I::Engine->GetProductVersionString());
-			
+#ifdef _MSC_VER
+#ifndef __clang__
+			LabelText(CS_XOR("complier: MSVC"), std::to_string(_MSC_VER).c_str());
+#endif 
+#endif
+#ifdef __clang__
+			LabelText(CS_XOR("complier: Clang"), std::to_string(__clang_major__).c_str());
+#endif
+			LabelText(CS_XOR("software licenced to:"), getenv("USERNAME"));
 		}
 		EndChild();
 
