@@ -668,7 +668,7 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 					{
 						const float factor = static_cast<float>(ammo) / max_ammo;
 						// here we use the SIDE_BOTTOM which overrided max_ammo as the var used for factor limitation
-						context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, ammo, Vars.overlayAmmoBar));
+						context.AddComponent(new CBarComponent(false, SIDE_BOTTOM, vecBox, factor, Vars.overlayAmmoBar));
 					}
 				}
 			}
