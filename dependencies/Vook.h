@@ -115,7 +115,8 @@ namespace Vook
         const std::uint8_t* JmpAddress = PatternScan(GameOverlayRenderer, "E8 ? ? ? ? 83 C4 08 FF 15 ? ? ? ?");
 #endif
 
-        ValveUnhook = reinterpret_cast<FnValveUnhook>(JmpAddress + 5 + *(DWORD*)(JmpAddress + 1));
+	ValveUnhook = reinterpret_cast<FnValveUnhook>(const_cast<std::uint8_t*>(JmpAddress + 5 + *(DWORD*)(JmpAddress + 1)));
+
 
 		[[unlikely]]
 		if (!ValveUnhook)
