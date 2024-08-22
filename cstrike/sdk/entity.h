@@ -223,10 +223,17 @@ public:
 	SCHEMA_ADD_FIELD(std::float_t, GetSimulationTime, "C_BaseModelEntity->m_flSimulationTime");
 };
 
-class CPlayer_ItemServices;
+class CCSPlayer_ItemServices : public C_BaseModelEntity
+{
+public:
+	CS_CLASS_NO_INITIALIZER(CCSPlayer_ItemServices);
+	SCHEMA_ADD_FIELD(bool, HasDefuser, "CCSPlayer_ItemServices->m_bHasDefuser");
+	SCHEMA_ADD_FIELD(bool, HasHeavyArmor, "CCSPlayer_ItemServices->m_bHasHeavyArmor");
+	SCHEMA_ADD_FIELD(bool, HasHelmet, "CCSPlayer_ItemServices->m_bHasHelmet");
+};
 class CPlayer_CameraServices;
 
-class CPlayer_WeaponServices : public C_BaseModelEntity
+class CPlayer_WeaponServices : public CCSPlayer_ItemServices
 {
 public:
 	CS_CLASS_NO_INITIALIZER(CPlayer_WeaponServices);
@@ -250,7 +257,7 @@ public:
 
 	SCHEMA_ADD_FIELD(CBaseHandle, GetControllerHandle, "C_BasePlayerPawn->m_hController");
 	SCHEMA_ADD_FIELD(CCSPlayer_WeaponServices*, GetWeaponServices, "C_BasePlayerPawn->m_pWeaponServices");
-	SCHEMA_ADD_FIELD(CPlayer_ItemServices*, GetItemServices, "C_BasePlayerPawn->m_pItemServices");
+	SCHEMA_ADD_FIELD(CCSPlayer_ItemServices*, GetItemServices, "C_BasePlayerPawn->m_pItemServices");
 	SCHEMA_ADD_FIELD(CPlayer_CameraServices*, GetCameraServices, "C_BasePlayerPawn->m_pCameraServices");
 
 	[[nodiscard]] Vector_t GetEyePosition()

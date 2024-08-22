@@ -629,7 +629,8 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 	if (const auto& armorOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayArmor); armorOverlayConfig.bEnable)
 	{
 		const float flArmorValue = pPlayerPawn->GetArmorValue();
-		const bool bHasHelmet = pPlayer->IsPawnHasHelmet();
+		auto ItemServices = pPlayerPawn->GetItemServices();
+		const bool bHasHelmet = ItemServices->HasHelmet();
 		if (flArmorValue > 0.f)
 		{
 			if (bHasHelmet)
