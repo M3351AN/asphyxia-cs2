@@ -36,6 +36,7 @@ static BOOL CALLBACK EnumWindowsCallback(HWND handle, LPARAM lParam)
 
 bool IPT::Setup()
 {
+
 	while (hWindow == nullptr)
 	{
 		EnumWindows(::EnumWindowsCallback, reinterpret_cast<LPARAM>(&hWindow));

@@ -147,6 +147,7 @@
     <ClInclude Include="..\dependencies\minhook\trampoline.h" />
     <ClInclude Include="..\dependencies\stb_image.h" />
     <ClInclude Include="..\dependencies\stb_sprintf.h" />
+    <ClInclude Include="..\dependencies\Vook.h" />
     <ClInclude Include="..\dependencies\xorstr.h" />
     <ClInclude Include="..\resources\fa_solid_900.h" />
     <ClInclude Include="..\resources\font_awesome_5.h" />

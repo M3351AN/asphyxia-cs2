@@ -48,6 +48,14 @@
 
 bool H::Setup()
 {
+	if (!Vook::Initialize())
+	{
+		L_PRINT(LOG_ERROR) << CS_XOR("failed to initialize Vook");
+
+		return false;
+	}
+	L_PRINT(LOG_INFO) << CS_XOR("Vook initialization completed");
+	
 	if (MH_Initialize() != MH_OK)
 	{
 		L_PRINT(LOG_ERROR) << CS_XOR("failed to initialize minhook");
@@ -55,14 +63,14 @@ bool H::Setup()
 		return false;
 	}
 	L_PRINT(LOG_INFO) << CS_XOR("minhook initialization completed");
-
-	//if (!hkPresent.Create(MEM::FindPattern(GAMEOVERLAYRENDERER_DLL, CS_XOR("48 89 6C 24 ? 48 89 74 24 ? 41 56 48 83 EC ?")), reinterpret_cast<void*>(&Present)))
-	if (!hkPresent.Create(MEM::GetVFunc(I::SwapChain->pDXGISwapChain, VTABLE::D3D::PRESENT), reinterpret_cast<void*>(&Present)))
+	
+	//if (!hkPresent.Vreate(MEM::FindPattern(GAMEOVERLAYRENDERER_DLL, CS_XOR("48 89 6C 24 ? 48 89 74 24 ? 41 56 48 83 EC ?")), reinterpret_cast<void*>(&Present)))
+	if (!hkPresent.Vreate(MEM::GetVFunc(I::SwapChain->pDXGISwapChain, VTABLE::D3D::PRESENT), reinterpret_cast<void*>(&Present)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"Present\" hook has been created");
 	// WE USE STEAM OVERLAY
-	if (!hkResizeBuffers.Create(MEM::FindPattern(GAMEOVERLAYRENDERER_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 30 44 8B FA")), reinterpret_cast<void*>(&ResizeBuffers)))
-	//if (!hkResizeBuffers.Create(MEM::GetVFunc(I::SwapChain->pDXGISwapChain, VTABLE::D3D::RESIZEBUFFERS), reinterpret_cast<void*>(&ResizeBuffers)))
+	//if (!hkResizeBuffers.Create(MEM::FindPattern(GAMEOVERLAYRENDERER_DLL, CS_XOR("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 30 44 8B FA")), reinterpret_cast<void*>(&ResizeBuffers)))
+	if (!hkResizeBuffers.Vreate(MEM::GetVFunc(I::SwapChain->pDXGISwapChain, VTABLE::D3D::RESIZEBUFFERS), reinterpret_cast<void*>(&ResizeBuffers)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"ResizeBuffers\" hook has been created");
 
@@ -76,7 +84,7 @@ bool H::Setup()
 	IDXGIFactory* pIDXGIFactory = NULL;
 	pDXGIAdapter->GetParent(IID_PPV_ARGS(&pIDXGIFactory));
 
-	if (!hkCreateSwapChain.Create(MEM::GetVFunc(pIDXGIFactory, VTABLE::DXGI::CREATESWAPCHAIN), reinterpret_cast<void*>(&CreateSwapChain)))
+	if (!hkCreateSwapChain.Vreate(MEM::GetVFunc(pIDXGIFactory, VTABLE::DXGI::CREATESWAPCHAIN), reinterpret_cast<void*>(&CreateSwapChain)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"CreateSwapChain\" hook has been created");
 
@@ -94,10 +102,10 @@ bool H::Setup()
 
 	// @ida: #STR: cl: CreateMove clamped invalid attack history index %d in frame history to -1. Was %d, frame history size %d.\n
 	if (!hkCreateMove.Create(MEM::GetVFunc(I::Input, VTABLE::CLIENT::CREATEMOVE), reinterpret_cast<void*>(&CreateMove)))
-		return false;
+		//return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"CreateMove\" hook has been created");
 
-	if (!hkMouseInputEnabled.Create(MEM::GetVFunc(I::Input, VTABLE::CLIENT::MOUSEINPUTENABLED), reinterpret_cast<void*>(&MouseInputEnabled)))
+	if (!hkMouseInputEnabled.Vreate(MEM::GetVFunc(I::Input, VTABLE::CLIENT::MOUSEINPUTENABLED), reinterpret_cast<void*>(&MouseInputEnabled)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"MouseInputEnabled\" hook has been created");
 
@@ -143,7 +151,7 @@ void H::Destroy()
 {
 	MH_DisableHook(MH_ALL_HOOKS);
 	MH_RemoveHook(MH_ALL_HOOKS);
-
+	Vook::UnhookAll();
 	MH_Uninitialize();
 }
 
