@@ -612,15 +612,34 @@ void OVERLAY::Player(CCSPlayerController* pLocal, CCSPlayerController* pPlayer, 
 	if (const auto& healthOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayHealthBar); healthOverlayConfig.bEnable)
 	{
 		// @note: pPlayerPawn->GetMaxHealth() sometime return 0.f
-		const float flHealthFactor = pPlayerPawn->GetHealth() / 100.f;
+		const float flMaxHealth = pPlayerPawn->GetMaxHealth();
+		float flHealthFactor = 1.f;
+		if (flMaxHealth > 0.f)
+			flHealthFactor = pPlayerPawn->GetHealth() / flMaxHealth;
+		else
+			flHealthFactor = pPlayerPawn->GetHealth() / 100.f;
 		context.AddComponent(new CBarComponent(false, SIDE_LEFT, vecBox, flHealthFactor, Vars.overlayHealthBar));
 	}
 
-	if (const auto& armorOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayArmorBar); armorOverlayConfig.bEnable)
+	if (const auto& armorBarOverlayConfig = C_GET(BarOverlayVar_t, Vars.overlayArmorBar); armorBarOverlayConfig.bEnable)
 	{
 		const float flArmorFactor = pPlayerPawn->GetArmorValue() / 100.f;
 		context.AddComponent(new CBarComponent(false, SIDE_RIGHT, vecBox, flArmorFactor, Vars.overlayArmorBar));
 	}
+	if (const auto& armorOverlayConfig = C_GET(TextOverlayVar_t, Vars.overlayArmor); armorOverlayConfig.bEnable)
+	{
+		const float flArmorValue = pPlayerPawn->GetArmorValue();
+		const bool bHasHelmet = pPlayer->IsPawnHasHelmet();
+		if (flArmorValue > 0.f)
+		{
+			if (bHasHelmet)
+				context.AddComponent(new CTextComponent(false, SIDE_RIGHT, DIR_RIGHT, FONT::pVisual, CS_XOR("HK"), Vars.overlayArmor));
+			else
+				context.AddComponent(new CTextComponent(false, SIDE_RIGHT, DIR_RIGHT, FONT::pVisual, CS_XOR("K"), Vars.overlayArmor));
+		}
+
+	}
+
 
 	CPlayer_WeaponServices* WeaponServices = pPlayerPawn->GetWeaponServices();
 	if (WeaponServices)

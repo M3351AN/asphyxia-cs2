@@ -126,7 +126,7 @@ struct BarOverlayVar_t
 	Color_t colSecondary = Color_t(255, 255, 255);
 
 	Color_t colBackground = Color_t{};
-	Color_t colOutline = Color_t{};
+	Color_t colOutline = Color_t(0,0,0);
 };
 
 #pragma endregion

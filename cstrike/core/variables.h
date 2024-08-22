@@ -54,8 +54,10 @@ struct Variables_t
 
 	C_ADD_VARIABLE(FrameOverlayVar_t, overlayBox, FrameOverlayVar_t(false));
 	C_ADD_VARIABLE(TextOverlayVar_t, overlayName, TextOverlayVar_t(false));
+	C_ADD_VARIABLE(TextOverlayVar_t, overlayScope, TextOverlayVar_t(false));
 	C_ADD_VARIABLE(TextOverlayVar_t, overlayWeapon, TextOverlayVar_t(false));
-	C_ADD_VARIABLE(BarOverlayVar_t, overlayHealthBar, BarOverlayVar_t(false, false, false, 1.f, Color_t(0, 255, 0), Color_t(255, 0, 0)));
+	C_ADD_VARIABLE(TextOverlayVar_t, overlayArmor, TextOverlayVar_t(false));
+	C_ADD_VARIABLE(BarOverlayVar_t, overlayHealthBar, BarOverlayVar_t(false, false, true, 1.f, Color_t(0, 255, 0), Color_t(255, 0, 0)));
 	C_ADD_VARIABLE(BarOverlayVar_t, overlayArmorBar, BarOverlayVar_t(false, false, false, 1.f, Color_t(255, 255, 0), Color_t(255, 0, 0)));
 	C_ADD_VARIABLE(BarOverlayVar_t, overlayAmmoBar, BarOverlayVar_t(false, false, false, 1.f, Color_t(0, 255, 255), Color_t(255, 0, 0)));
 
