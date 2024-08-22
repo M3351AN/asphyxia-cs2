@@ -96,7 +96,7 @@ bool H::Setup()
 	pIDXGIFactory = nullptr;
 
 	// @ida: class CViewRender->OnRenderStart call GetMatricesForView
-	if (!hkGetMatrixForView.Create(MEM::FindPattern(CLIENT_DLL, CS_XOR("40 53 48 81 EC ? ? ? ? 49 8B C1")), reinterpret_cast<void*>(&GetMatrixForView)))
+	if (!hkGetMatrixForView.Vreate(MEM::FindPattern(CLIENT_DLL, CS_XOR("40 53 48 81 EC ? ? ? ? 49 8B C1")), reinterpret_cast<void*>(&GetMatrixForView)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"GetMatrixForView\" hook has been created");
 
@@ -109,7 +109,7 @@ bool H::Setup()
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"MouseInputEnabled\" hook has been created");
 
-	if (!hkFrameStageNotify.Create(MEM::GetVFunc(I::Client, VTABLE::CLIENT::FRAMESTAGENOTIFY), reinterpret_cast<void*>(&FrameStageNotify)))
+	if (!hkFrameStageNotify.Vreate(MEM::GetVFunc(I::Client, VTABLE::CLIENT::FRAMESTAGENOTIFY), reinterpret_cast<void*>(&FrameStageNotify)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"FrameStageNotify\" hook has been created");
 
@@ -140,7 +140,7 @@ bool H::Setup()
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"DrawObject\" hook has been created");
 
-	if (!hkIsRelativeMouseMode.Create(MEM::GetVFunc(I::InputSystem, VTABLE::INPUTSYSTEM::ISRELATIVEMOUSEMODE), reinterpret_cast<void*>(&IsRelativeMouseMode)))
+	if (!hkIsRelativeMouseMode.Vreate(MEM::GetVFunc(I::InputSystem, VTABLE::INPUTSYSTEM::ISRELATIVEMOUSEMODE), reinterpret_cast<void*>(&IsRelativeMouseMode)))
 		return false;
 	L_PRINT(LOG_INFO) << CS_XOR("\"IsRelativeMouseMode\" hook has been created");
 
